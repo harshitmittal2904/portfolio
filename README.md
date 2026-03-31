@@ -4,7 +4,7 @@
 
 This portfolio is proof of a simple thesis: AI doesn't replace product thinking — it compresses execution. Every project here went from idea to live product, built with AI as a co-pilot.
 
-🔗 **Portfolio:** [harshitmittal2904.vercel.app](https://harshitmittal2904.vercel.app)
+🔗 **Portfolio:** [harshitmittal.vercel.app](https://harshitmittal.vercel.app)
 🔗 **LinkedIn:** [linkedin.com/in/harshitmittal2904](https://www.linkedin.com/in/harshitmittal2904)
 📧 **Email:** harshitmittal@zohomail.in
 
