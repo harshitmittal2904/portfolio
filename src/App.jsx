@@ -18,7 +18,7 @@ const PROFILE = {
     "0→1 Product Builds",
   ],
   stats: [
-    { label: "AI Projects", value: "02", note: "and counting" },
+    { label: "AI Projects", value: "03", note: "and counting" },
     { label: "Focus", value: "AI PM", note: "product management" },
     { label: "Approach", value: "Idea→Ship", note: "end to end" },
   ],
@@ -110,6 +110,57 @@ const PROJECTS = [
       "Built comprehensive AI system prompt covering every scheme's rules, rates, and 2025 PFRDA/EPFO changes",
       "Designed keyword-based fallback so the app never errors — pre-written answers for common queries",
       "Covered 10+ schemes: NPS, PPF, EPF, SSY, SCSS, APY, NSC, KVP, POMIS, SGB, NPS Vatsalya",
+    ],
+  },
+  {
+    id: "labdecode",
+    title: "LabDecode",
+    company: "HealthTech / AI",
+    number: "#3",
+    status: "Live on Vercel",
+    tagline: "Your lab reports, finally understood. Upload any medical report — get instant, plain-language insights.",
+    cover: "🔬",
+    color: "#0F766E",
+    tags: ["AI/ML", "HealthTech", "React", "Claude API", "PDF Parsing"],
+    liveUrl: "https://read-my-report.vercel.app/",
+    problem:
+      "Lab reports are written for doctors, not patients. Millions of people receive blood tests, metabolic panels, and health reports they can't understand. Reference ranges vary by age, sex, and country. There's no product that translates medical lab data into plain, actionable language — without overstepping into diagnosis.",
+    metrics: [
+      { label: "Parameters", value: "100+", sub: "recognized & analyzed" },
+      { label: "Organ Systems", value: "10", sub: "categorized views" },
+      { label: "Global Units", value: "2", sub: "mg/dL & mmol/L" },
+      { label: "Signup Required", value: "0", sub: "free & private" },
+    ],
+    features: [
+      { title: "PDF & Camera Upload", desc: "Upload PDFs or capture reports with your phone camera. Multi-page support for elderly users who can't save PDFs." },
+      { title: "AI Report Analysis", desc: "Claude Sonnet reads every parameter, categorizes by organ system, and explains each value in plain English." },
+      { title: "Organ System View", desc: "Results grouped by Heart, Liver, Kidneys, Blood, Thyroid, Metabolism, Vitamins, Bones, Hormones, and Inflammation." },
+      { title: "4-Level Status System", desc: "Excellent → Normal → Needs Attention → Review Recommended. No alarming language, no diagnosis." },
+      { title: "Visual Range Bars", desc: "Color-coded bars showing exactly where your value falls within the reference range — instantly understandable." },
+      { title: "Evidence-Based Suggestions", desc: "Lifestyle recommendations citing AHA, WHO, NIH, and peer-reviewed research. Never vague — always specific and actionable." },
+      { title: "Unit Auto-Detection", desc: "Works with reports from any country. Auto-detects mg/dL or mmol/L and provides toggle between US and SI units." },
+      { title: "Age & Sex Adjusted Ranges", desc: "Optional pre-analysis form adjusts reference ranges for age, biological sex, and pregnancy status." },
+      { title: "Report Comparison", desc: "Upload multiple reports over time. Track trends with charts. See which values are improving." },
+    ],
+    techStack: [
+      { category: "Frontend", items: "React, Tailwind CSS" },
+      { category: "AI", items: "Claude Sonnet API (Vision + Text)" },
+      { category: "PDF", items: "PDF.js for text, Claude Vision for scans" },
+      { category: "Deploy", items: "Vercel Serverless Functions" },
+      { category: "Storage", items: "localStorage (zero server storage)" },
+    ],
+    process: [
+      "Researched how reference ranges vary by lab, country, ethnicity, age, sex, and testing method — built a universal range system",
+      "Designed a 4-level status system (Excellent/Normal/Attention/Review) that informs without alarming — no medical jargon, no diagnosis",
+      "Built comprehensive AI system prompt covering CBC, CMP, LFT, KFT, thyroid, hormones, vitamins, cardiac markers, and coagulation panels",
+      "Implemented camera capture for elderly users + PDF.js text extraction with Claude Vision fallback for scanned reports",
+      "Added 7 strategically placed medical disclaimers — LabDecode never diagnoses, prescribes, or replaces a doctor",
+    ],
+    disclaimers: [
+      "LabDecode is an educational health literacy tool",
+      "It does not diagnose, prescribe, or replace professional medical advice",
+      "Every analysis includes 7 strategically placed disclaimers",
+      "No user data is stored on any server",
     ],
   },
 ];
@@ -532,6 +583,178 @@ function SchemeWiseDetail({ project, onBack }) {
   );
 }
 
+// ─── LABDECODE DETAIL PAGE ───
+function LabDecodeDetail({ project, onBack }) {
+  const [activeTab, setActiveTab] = useState("overview");
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "features", label: "Features" },
+    { id: "tech", label: "Tech & Process" },
+  ];
+  const c = project.color;
+
+  return (
+    <div style={{ animation: "fadeIn 0.35s ease" }}>
+      <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "7px 14px", color: "#aaa", fontSize: 11, fontWeight: 600, cursor: "pointer", marginBottom: 24, transition: "all 0.2s" }} onMouseEnter={e => { e.currentTarget.style.background = `${c}14`; e.currentTarget.style.color = c; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#aaa"; }}>← Back to Portfolio</button>
+
+      {/* Hero */}
+      <div style={{ position: "relative", marginBottom: 32 }}>
+        <div style={{ position: "absolute", top: -60, right: -100, width: 350, height: 350, borderRadius: "50%", background: `radial-gradient(circle, ${c}10 0%, transparent 70%)`, filter: "blur(60px)", pointerEvents: "none" }} />
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 12px", borderRadius: 20, background: `${c}14`, border: `1px solid ${c}20`, marginBottom: 16 }}>
+          <span style={{ fontSize: 10, animation: "pulse 2s ease infinite" }}>●</span>
+          <span style={{ color: c, fontSize: 11, fontWeight: 600 }}>Project {project.number} — {project.company}</span>
+        </div>
+        <h1 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, letterSpacing: -1.5, lineHeight: 1.1, maxWidth: 650, marginBottom: 12 }}>
+          Lab<span style={{ background: `linear-gradient(135deg, ${c}, #10B981)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Decode</span>
+        </h1>
+        <p style={{ fontSize: 15, color: "#888", maxWidth: 540, lineHeight: 1.7, marginBottom: 16 }}>Your lab reports, finally understood. Upload any medical report — get instant, plain-language insights organized by body system.</p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 18px", borderRadius: 10, background: c, color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none", transition: "transform 0.15s" }} onMouseDown={e => e.currentTarget.style.transform = "scale(0.97)"} onMouseUp={e => e.currentTarget.style.transform = "scale(1)"}>🔗 View Live App</a>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {project.tags.map(t => <span key={t} style={{ padding: "4px 10px", borderRadius: 6, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontSize: 10, color: "#999", fontWeight: 500 }}>{t}</span>)}
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: 3, gap: 2, marginBottom: 28 }}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{ padding: "7px 18px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", background: activeTab === t.id ? `${c}1A` : "transparent", color: activeTab === t.id ? c : "#777" }}>{t.label}</button>
+        ))}
+      </div>
+
+      {/* Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 10, marginBottom: 36 }}>
+        {project.metrics.map((m, i) => (
+          <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
+            <div style={{ fontSize: 26, fontWeight: 800, fontFamily: "'JetBrains Mono', monospace", color: c, letterSpacing: -1 }}>{m.value}</div>
+            <div style={{ fontSize: 10, color: "#aaa", fontWeight: 600, marginTop: 2 }}>{m.label}</div>
+            <div style={{ fontSize: 9, color: "#666", marginTop: 2 }}>{m.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* OVERVIEW */}
+      {activeTab === "overview" && (
+        <div style={{ animation: "fadeIn 0.3s ease" }}>
+          {/* Problem */}
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: 22, marginBottom: 16 }}>
+            <div style={{ color: "#ff6b6b", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 10 }}>THE PROBLEM</div>
+            <p style={{ color: "#ccc", fontSize: 12, lineHeight: 1.8 }}>{project.problem}</p>
+          </div>
+
+          {/* Solution */}
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: 22, marginBottom: 16 }}>
+            <div style={{ color: "#10B981", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 10 }}>WHAT I BUILT</div>
+            <p style={{ color: "#ccc", fontSize: 12, lineHeight: 1.8 }}>LabDecode is a free, AI-powered web app that reads any medical lab report — blood tests, metabolic panels, organ function tests — and translates every parameter into plain, understandable language. Results are grouped by organ system with color-coded status indicators and evidence-based lifestyle suggestions.</p>
+            <p style={{ color: "#999", fontSize: 12, lineHeight: 1.8, marginTop: 10 }}>It does NOT diagnose. It does NOT prescribe. It helps you understand your own health data — so you can have better conversations with your doctor.</p>
+          </div>
+
+          {/* How AI powers it */}
+          <div style={{ background: `linear-gradient(135deg, ${c}08, ${c}04)`, border: `1px solid ${c}14`, borderRadius: 16, padding: 22, marginBottom: 16 }}>
+            <div style={{ color: c, fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 14 }}>🤖 AI AT THE CORE</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10 }}>
+              {[
+                { s: "01", t: "Claude Vision + Text", d: "Reads PDFs via text extraction and scanned/photo reports via Claude Vision API for OCR" },
+                { s: "02", t: "Medical Knowledge Base", d: "Comprehensive system prompt covering CBC, CMP, LFT, KFT, thyroid, hormones, vitamins, cardiac markers, and coagulation" },
+                { s: "03", t: "Smart Categorization", d: "Groups 100+ parameters into 10 organ systems with a 4-level status system: Excellent → Normal → Attention → Review" },
+                { s: "04", t: "Evidence-Based Suggestions", d: "Lifestyle recommendations citing AHA, WHO, NIH, and peer-reviewed research — never vague, always actionable" },
+              ].map(item => (
+                <div key={item.s} style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: 14 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", color: c, fontSize: 17, fontWeight: 800, marginBottom: 4 }}>{item.s}</div>
+                  <div style={{ color: "#e8e8e8", fontWeight: 700, fontSize: 11, marginBottom: 4 }}>{item.t}</div>
+                  <div style={{ color: "#888", fontSize: 10, lineHeight: 1.5 }}>{item.d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Organ Systems */}
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: 22, marginBottom: 16 }}>
+            <div style={{ color: c, fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 12 }}>ORGAN SYSTEM VIEWS</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 8 }}>
+              {[
+                { icon: "❤️", name: "Heart" },
+                { icon: "🫘", name: "Kidneys" },
+                { icon: "🧬", name: "Liver" },
+                { icon: "🩸", name: "Blood" },
+                { icon: "🦋", name: "Thyroid" },
+                { icon: "🔬", name: "Metabolism" },
+                { icon: "💊", name: "Vitamins" },
+                { icon: "🦴", name: "Bones" },
+                { icon: "⚡", name: "Hormones" },
+                { icon: "🛡️", name: "Inflammation" },
+              ].map((o, i) => (
+                <div key={i} style={{ background: "rgba(0,0,0,0.2)", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
+                  <div style={{ fontSize: 20, marginBottom: 4 }}>{o.icon}</div>
+                  <div style={{ fontSize: 9, color: "#aaa", fontWeight: 600 }}>{o.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Safety */}
+          <div style={{ background: "rgba(251,113,133,0.06)", border: "1px solid rgba(251,113,133,0.12)", borderRadius: 16, padding: 22 }}>
+            <div style={{ color: "#FB7185", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 10 }}>🛡️ SAFETY BY DESIGN</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {project.disclaimers.map((d, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                  <span style={{ color: "#FB7185", fontSize: 10, marginTop: 1 }}>✓</span>
+                  <span style={{ color: "#ccc", fontSize: 11, lineHeight: 1.5 }}>{d}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FEATURES */}
+      {activeTab === "features" && (
+        <div style={{ animation: "fadeIn 0.3s ease" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
+            {project.features.map((f, i) => (
+              <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 14, padding: 18, transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.border = `1px solid ${c}20`} onMouseLeave={e => e.currentTarget.style.border = "1px solid rgba(255,255,255,0.05)"}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, color: c, background: `${c}14`, padding: "2px 7px", borderRadius: 5 }}>{String(i + 1).padStart(2, "0")}</span>
+                  <div style={{ color: "#e8e8e8", fontWeight: 700, fontSize: 12 }}>{f.title}</div>
+                </div>
+                <div style={{ color: "#888", fontSize: 11, lineHeight: 1.6 }}>{f.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* TECH & PROCESS */}
+      {activeTab === "tech" && (
+        <div style={{ animation: "fadeIn 0.3s ease", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: 22 }}>
+            <div style={{ color: c, fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 14 }}>TECH STACK</div>
+            {project.techStack.map((t, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "8px 0", borderBottom: i < project.techStack.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: c, fontSize: 9, fontWeight: 700, minWidth: 60 }}>{t.category}</span>
+                <span style={{ color: "#ccc", fontSize: 11 }}>{t.items}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: 16 }}>
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: 10, background: `${c}1A`, border: `1px solid ${c}30`, color: c, fontSize: 11, fontWeight: 700, textDecoration: "none" }}>🔗 View Live App →</a>
+            </div>
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 16, padding: 22 }}>
+            <div style={{ color: "#10B981", fontSize: 10, fontWeight: 700, letterSpacing: 1, marginBottom: 14 }}>BUILD PROCESS</div>
+            {project.process.map((step, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "8px 0", borderBottom: i < project.process.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: "#555", fontSize: 9, fontWeight: 700, marginTop: 2 }}>{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ color: "#ccc", fontSize: 11, lineHeight: 1.6 }}>{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── PROJECT DETAIL PAGE ───
 function ProjectDetail({ project, onBack }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -814,7 +1037,7 @@ export default function App() {
                 {/* Coming soon */}
                 <div style={{ background: "rgba(255,255,255,0.01)", border: "1px dashed rgba(255,255,255,0.08)", borderRadius: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 300, gap: 10 }}>
                   <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, color: "#555" }}>+</div>
-                  <div style={{ color: "#555", fontSize: 13, fontWeight: 600 }}>Project #3</div>
+                  <div style={{ color: "#555", fontSize: 13, fontWeight: 600 }}>Project #4</div>
                   <div style={{ color: "#444", fontSize: 11 }}>Coming soon</div>
                 </div>
               </div>
@@ -831,6 +1054,8 @@ export default function App() {
           <div style={{ padding: "24px 0 80px" }}>
             {selectedProject.id === "schemewise"
               ? <SchemeWiseDetail project={selectedProject} onBack={goHome} />
+              : selectedProject.id === "labdecode"
+              ? <LabDecodeDetail project={selectedProject} onBack={goHome} />
               : <ProjectDetail project={selectedProject} onBack={goHome} />
             }
           </div>
