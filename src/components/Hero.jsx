@@ -4,6 +4,11 @@ export default function Hero() {
   return (
     <section className="px-6 pt-20 pb-16 md:pt-28 md:pb-24">
       <div className="max-w-content mx-auto">
+        {/* Name */}
+        <div className="font-mono text-sm text-text-2 mb-3">
+          {PROFILE.name}
+        </div>
+
         {/* Eyebrow */}
         <div className="flex items-center gap-3 mb-8">
           <span className="h-2 w-2 rounded-full bg-green animate-pulse" />
