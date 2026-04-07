@@ -2,6 +2,7 @@
   "name": "ai-product-portfolio",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Harshit Mittal - AI Product Portfolio",
   "scripts": {
     "dev": "vite",
