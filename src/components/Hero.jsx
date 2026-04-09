@@ -2,64 +2,87 @@ import { PROFILE } from "../data/profile";
 
 export default function Hero() {
   return (
-    <section className="px-6 pt-20 pb-16 md:pt-28 md:pb-24">
+    <section className="px-6 md:px-10 pt-20 md:pt-24 pb-16 md:pb-20">
       <div className="max-w-content mx-auto">
-        {/* Name */}
-        <div className="font-mono text-sm text-text-2 mb-3">
-          {PROFILE.name}
-        </div>
+        <div className="max-w-[780px]">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-border bg-surface mb-8">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent animate-soft-pulse" />
+            <span className="font-sans text-[10px] font-semibold tracking-[0.5px] uppercase text-text-3">
+              {PROFILE.role} · UKG
+            </span>
+          </div>
 
-        {/* Eyebrow */}
-        <div className="flex items-center gap-3 mb-8">
-          <span className="h-2 w-2 rounded-full bg-green animate-pulse" />
-          <span className="font-mono text-xs tracking-wider text-text-2 uppercase">
-            {PROFILE.role} · Available for select roles
-          </span>
-        </div>
-
-        {/* Tagline */}
-        <h1 className="font-display font-bold text-text-1 leading-[1.05] tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-          {PROFILE.tagline}
-        </h1>
-
-        {/* Subtitle */}
-        <p className="mt-6 max-w-2xl text-text-2 text-base md:text-lg leading-relaxed">
-          {PROFILE.subtitle}
-        </p>
-
-        {/* Stats */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl">
-          {PROFILE.stats.map((s) => (
-            <div key={s.label} className="border-l-2 border-border pl-4">
-              <div className="font-mono text-3xl md:text-4xl text-accent font-bold">{s.value}</div>
-              <div className="font-sans text-sm text-text-1 mt-1">{s.label}</div>
-              <div className="font-mono text-xs text-text-3 mt-0.5">{s.note}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTAs */}
-        <div className="mt-12 flex flex-wrap gap-3">
-          <a
-            href={PROFILE.cta.email}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-md bg-accent text-bg font-sans font-semibold text-sm hover:brightness-110 transition"
+          {/* Title */}
+          <h1
+            className="font-display font-extrabold text-text-1"
+            style={{
+              fontSize: "clamp(44px, 6vw, 74px)",
+              lineHeight: 1.0,
+              letterSpacing: "-2.5px",
+            }}
           >
-            Email me
-          </a>
-          <a
-            href={PROFILE.cta.resumeUrl}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-border text-text-1 font-sans font-semibold text-sm hover:bg-surface transition"
-          >
-            Resume ↓
-          </a>
-          <a
-            href={PROFILE.cta.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-border text-text-1 font-sans font-semibold text-sm hover:bg-surface transition"
-          >
-            LinkedIn ↗
-          </a>
+            I don't just write PRDs.
+            <br />
+            I ship{" "}
+            <span
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #FFD400 20%, #FF8C00)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              prototypes.
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="mt-6 max-w-[540px] font-sans text-base text-text-2 font-light leading-[1.75]">
+            {PROFILE.subtitle}
+          </p>
+
+          {/* CTAs */}
+          <div className="mt-10 flex flex-wrap gap-2.5">
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-1.5 bg-accent text-black font-sans text-[13px] font-extrabold px-5 py-3 rounded-[9px] hover:opacity-85 transition"
+            >
+              See my work →
+            </a>
+            <a
+              href={PROFILE.cta.resumeUrl}
+              className="inline-flex items-center gap-1.5 text-text-2 font-sans text-[13px] font-medium px-5 py-3 rounded-[9px] border border-border hover:border-border-2 hover:text-text-1 transition"
+            >
+              Resume ↓
+            </a>
+            <a
+              href={PROFILE.cta.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-text-2 font-sans text-[13px] font-medium px-5 py-3 rounded-[9px] border border-border hover:border-border-2 hover:text-text-1 transition"
+            >
+              ↗ LinkedIn
+            </a>
+          </div>
+
+          {/* Stats with vertical separators */}
+          <div className="mt-14 pt-7 border-t border-border flex flex-wrap items-start">
+            {PROFILE.stats.map((s, i) => (
+              <div
+                key={s.label}
+                className={`pr-9 ${i < PROFILE.stats.length - 1 ? "mr-9 border-r border-border" : ""}`}
+              >
+                <div className="font-mono text-[22px] font-bold text-text-1 tracking-[-1px]">
+                  {s.value}
+                </div>
+                <div className="font-sans text-[10px] text-text-3 mt-1 font-medium tracking-[0.3px]">
+                  {s.label}
+                  {s.note ? ` · ${s.note}` : ""}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
