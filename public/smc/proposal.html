@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StoxKart eKYC Recovery + Partner Attribution — A PM Proposal by Harshit Mittal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0e1a;
+    --ink-2: #1a1f2e;
+    --paper: #f7f5f0;
+    --paper-2: #efece4;
+    --accent: #ff5b1f;
+    --accent-2: #ffd84a;
+    --green: #1f7a3a;
+    --red: #c0392b;
+    --rule: rgba(10,14,26,0.12);
+    --mute: rgba(10,14,26,0.6);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'ss01'; }
+  .serif { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+
+  /* ========== TOP BAR ========== */
+  .topbar {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .topbar .live::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--accent-2);
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1;} 50%{opacity:0.3;} }
+
+  /* ========== HERO ========== */
+  .hero {
+    padding: 64px 32px 80px;
+    max-width: 1280px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 64px;
+    align-items: end;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 18px;
+    max-width: 620px;
+    color: var(--mute);
+    line-height: 1.55;
+  }
+  .hero-meta {
+    border-left: 2px solid var(--ink);
+    padding-left: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.9;
+  }
+  .hero-meta .label { color: var(--mute); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+  .hero-meta .val { color: var(--ink); font-weight: 500; }
+
+  /* ========== PROBLEM STRIP ========== */
+  .problem {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 32px;
+  }
+  .problem-inner { max-width: 1280px; margin: 0 auto; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 16px;
+  }
+  .problem h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 48px;
+    max-width: 900px;
+  }
+  .problem h2 mark { background: transparent; color: var(--accent); }
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat {
+    background: var(--ink);
+    padding: 32px 24px;
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--paper);
+    margin-bottom: 12px;
+  }
+  .stat-num .unit { font-size: 28px; color: var(--mute); }
+  .stat-label {
+    font-size: 13px;
+    color: rgba(247,245,240,0.7);
+    line-height: 1.4;
+  }
+  .stat-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(247,245,240,0.4);
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ========== PROTOTYPE SECTION ========== */
+  .proto {
+    padding: 96px 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .proto-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+    align-items: end;
+  }
+  .proto-header h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .proto-header h2 em { font-style: italic; color: var(--accent); }
+  .proto-header p { font-size: 16px; color: var(--mute); line-height: 1.6; }
+
+  /* ========== FLOW DIAGRAM ========== */
+  .flow {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 48px;
+    margin-bottom: 64px;
+    position: relative;
+  }
+  .flow-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 32px;
+  }
+  .flow-stages {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .stage {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 16px;
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .stage-num { color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+  .stage-name { font-weight: 600; color: var(--ink); margin-bottom: 8px; font-size: 13px; font-family: 'Inter Tight', sans-serif; }
+  .stage-drop {
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .stage.critical { background: #fff3ee; border-color: var(--accent); }
+  .stage.critical .stage-drop { color: var(--accent); }
+
+  /* ========== MOCKUP GRID ========== */
+  .mockups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 64px;
+  }
+  .mock {
+    background: var(--ink);
+    border-radius: 28px;
+    padding: 12px;
+    aspect-ratio: 9 / 18;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-screen {
+    background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+    border-radius: 18px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-status {
+    background: rgba(0,0,0,0.02);
+    padding: 6px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    display: flex;
+    justify-content: space-between;
+    color: #333;
+  }
+  .phone-header {
+    background: #0a0e1a;
+    color: var(--paper);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .phone-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .phone-logo span { color: var(--accent); }
+  .phone-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    background: var(--accent);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: auto;
+    letter-spacing: 0.08em;
+  }
+  .phone-body {
+    padding: 16px;
+    flex: 1;
+    overflow: hidden;
+  }
+  .mock-label {
+    position: absolute;
+    bottom: -28px;
+    left: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+  }
+  .mock-label strong { color: var(--ink); }
+
+  /* MOCKUP 1: AI Drop-off detection */
+  .ai-card {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 10px;
+  }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #ff5b1f, #ffd84a);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .ai-badge::before { content: '✦'; }
+  .ai-msg {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .ai-msg strong { color: var(--accent); }
+  .ai-action {
+    background: var(--ink);
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    text-align: center;
+    font-weight: 500;
+  }
+  .progress-mini {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .progress-mini-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 60%;
+  }
+  .step-list {
+    font-size: 10px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .step-list .done { color: var(--green); }
+  .step-list .stuck { color: var(--accent); font-weight: 600; }
+  .step-list .pending { color: #999; }
+
+  /* MOCKUP 2: KYC scoring */
+  .kyc-score {
+    background: linear-gradient(135deg, #1a1f2e, #0a0e1a);
+    color: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .score-num .of { font-size: 14px; opacity: 0.5; }
+  .score-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .risk-row {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 6px;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .risk-name { color: var(--ink); }
+  .risk-flag {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .risk-flag.ok { background: #e8f5ec; color: var(--green); }
+  .risk-flag.warn { background: #fff3ee; color: var(--accent); }
+
+  /* MOCKUP 3: Partner */
+  .partner-stat {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .partner-stat-label {
+    font-size: 9px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .partner-stat-val {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .partner-stat-val .delta { font-size: 11px; color: var(--green); margin-left: 4px; }
+  .partner-stat-val .delta.down { color: var(--red); }
+  .lead-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    font-size: 10px;
+  }
+  .lead-row:first-of-type { border-top: none; }
+  .lead-name { color: var(--ink); font-weight: 500; }
+  .lead-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .lead-status.hot { background: #fff3ee; color: var(--accent); }
+  .lead-status.warm { background: #fffbe5; color: #9a7a00; }
+  .lead-status.won { background: #e8f5ec; color: var(--green); }
+
+  /* ========== BUILD STACK ========== */
+  .build {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 32px;
+  }
+  .build-inner { max-width: 1280px; margin: 0 auto; }
+  .build h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    margin-bottom: 48px;
+    max-width: 800px;
+  }
+  .build h2 em { color: var(--accent); font-style: italic; }
+  .build-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .build-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .build-col ul { list-style: none; }
+  .build-col li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(247,245,240,0.85);
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+  .build-col li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* ========== METRICS ========== */
+  .metrics {
+    padding: 96px 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .metrics h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    max-width: 800px;
+  }
+  .metrics h2 em { color: var(--accent); font-style: italic; }
+  .metrics-sub { color: var(--mute); margin-bottom: 48px; max-width: 600px; }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .kpi {
+    background: var(--paper);
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+  .kpi-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    margin-bottom: 8px;
+  }
+  .kpi-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .kpi-delta {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--green);
+    line-height: 1;
+    text-align: right;
+  }
+  .kpi-delta .arrow { color: var(--accent); }
+  .kpi-base {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  /* ========== ABOUT ========== */
+  .about {
+    background: var(--paper-2);
+    padding: 96px 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .about-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .about h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .about h2 em { color: var(--accent); font-style: italic; }
+  .about-body p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .about-body p strong { font-weight: 600; color: var(--ink); }
+  .portfolio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .portfolio-item {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 20px;
+  }
+  .portfolio-item h5 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .portfolio-item p {
+    font-size: 12px;
+    color: var(--mute);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ========== CTA / FOOTER ========== */
+  .footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 32px;
+  }
+  .footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .footer h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.1;
+    max-width: 500px;
+  }
+  .footer h3 em { color: var(--accent); font-style: italic; }
+  .footer-contact {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+  }
+  .footer-contact a { color: var(--accent-2); text-decoration: none; }
+  .footer-contact a:hover { color: var(--paper); }
+  .footer-meta {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 48px;
+    padding-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(247,245,240,0.5);
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .proto-header { grid-template-columns: 1fr; gap: 24px; }
+    .mockups { grid-template-columns: 1fr; }
+    .build-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr; }
+    .about-inner { grid-template-columns: 1fr; }
+    .portfolio { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+    .flow-stages { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Tiny back nav -->
+<div style="background: #0a0e1a; color: rgba(247,245,240,0.7); padding: 12px 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff5b1f;">
+  <a href="/smc/" style="color: #ff5b1f; text-decoration: none;">← Back to case study</a>
+  <span>Reference document · The product proposal</span>
+</div>
+
+<div class="topbar">
+  <span><span class="live"></span>Product Proposal · v1.0 · Confidential</span>
+  <span>For: Hina Choudhary, SMC Global Securities</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span>STOXKART · A PRODUCT PROPOSAL</div>
+  <div class="hero-grid">
+    <div>
+      <h1>Closing the<br/>15-minute gap.<br/><em>An eKYC + partner attribution rethink.</em></h1>
+      <p class="hero-sub">A working prototype and 90-day plan addressing the two highest-leverage problems in the JD: digital onboarding drop-offs and partner ecosystem scale. Built specifically for StoxKart and SMC's 2,400+ sub-broker network.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="label">Author</div>
+      <div class="val">Harshit Mittal</div>
+      <div class="label" style="margin-top:12px;">Role applied</div>
+      <div class="val">Product Manager — Fintech / Broking</div>
+      <div class="label" style="margin-top:12px;">Built using</div>
+      <div class="val">Claude Code · Lovable · Bolt</div>
+      <div class="label" style="margin-top:12px;">Read time</div>
+      <div class="val">~6 min</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <div class="section-label">/ The opportunity</div>
+    <h2>StoxKart's site advertises <mark>"15-minute account opening."</mark> In practice, reviews show 24 hours to 4 working days. That gap is where the customer goes to Zerodha or Groww.</h2>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">~60<span class="unit">%</span></div>
+        <div class="stat-label">Industry-typical drop-off rate during digital broking eKYC, concentrated at PAN/Aadhaar OTP and Video KYC stages</div>
+        <div class="stat-source">Industry benchmark</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">9.9<span class="unit">M</span></div>
+        <div class="stat-label">Active users on Groww. Zerodha at 7.3M. The discount-broking race is won on onboarding speed.</div>
+        <div class="stat-source">Public data, 2024</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2,400<span class="unit">+</span></div>
+        <div class="stat-label">SMC sub-brokers — a moat Zerodha and Groww don't have. Currently 30-45 day commission payout cycles.</div>
+        <div class="stat-source">SMC public listings</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2-3<span class="unit">w</span></div>
+        <div class="stat-label">Average sub-broker code activation time. Every week of delay is partner-attributed leads that go cold.</div>
+        <div class="stat-source">Franchise reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOTYPE -->
+<section class="proto" id="prototype">
+  <div class="proto-header">
+    <div>
+      <div class="section-label">/ The prototype</div>
+      <h2>An <em>agentic recovery layer</em> that catches drop-offs before they happen — and credits the right partner when they don't.</h2>
+    </div>
+    <div>
+      <p>Three connected screens: a real-time onboarding companion that intervenes at the exact friction point, an AI-assisted KYC risk scorer for the ops team, and a live partner attribution dashboard that compresses the lead-to-commission cycle from weeks to days.</p>
+    </div>
+  </div>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="flow">
+    <div class="flow-title">Onboarding funnel · drop-off mapping</div>
+    <div class="flow-stages">
+      <div class="stage">
+        <div class="stage-num">01</div>
+        <div class="stage-name">Mobile + Email</div>
+        <div class="stage-drop">~12% drop</div>
+      </div>
+      <div class="stage critical">
+        <div class="stage-num">02</div>
+        <div class="stage-name">PAN + Aadhaar OTP</div>
+        <div class="stage-drop">~28% drop</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">03</div>
+        <div class="stage-name">Bank linking</div>
+        <div class="stage-drop">~9% drop</div>
+      </div>
+      <div class="stage critical">
+        <div class="stage-num">04</div>
+        <div class="stage-name">Video KYC</div>
+        <div class="stage-drop">~18% drop</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">05</div>
+        <div class="stage-name">eSign + activate</div>
+        <div class="stage-drop">~7% drop</div>
+      </div>
+    </div>
+    <p class="mono" style="font-size:11px;color:var(--mute);">Highlighted stages = where the agentic layer intervenes. Stage 02 and 04 alone account for ~46% of total funnel loss.</p>
+  </div>
+
+  <!-- THREE MOCKUPS -->
+  <div class="mockups">
+    <!-- MOCKUP 1 -->
+    <div>
+      <div class="mock">
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span>9:41</span>
+            <span>●●● 5G ▮▮▮</span>
+          </div>
+          <div class="phone-header">
+            <div class="phone-logo">Stox<span>Kart</span></div>
+            <div class="phone-tag">Open Account</div>
+          </div>
+          <div class="phone-body">
+            <div style="font-size:10px;color:var(--mute);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Step 2 of 5 · PAN + Aadhaar</div>
+            <div class="progress-mini"><div class="progress-mini-fill"></div></div>
+            <div class="step-list">
+              <div class="done">✓ Phone + email verified</div>
+              <div class="stuck">◉ Aadhaar OTP — 2 attempts</div>
+              <div class="pending">○ Bank account linking</div>
+              <div class="pending">○ Video KYC</div>
+              <div class="pending">○ eSign</div>
+            </div>
+            <div class="ai-card" style="margin-top:14px;">
+              <span class="ai-badge">AI Companion</span>
+              <div class="ai-msg">Looks like Aadhaar OTP isn't reaching you. Most users at this point have <strong>changed their registered mobile</strong>. Want to switch to <strong>biometric KYC at a nearby branch</strong> in 24hrs — or continue trying OTP?</div>
+              <div class="ai-action">Find nearest SMC branch →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-label"><strong>01 ·</strong> Companion intervention</div>
+    </div>
+
+    <!-- MOCKUP 2 -->
+    <div>
+      <div class="mock">
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span>9:41</span>
+            <span>●●● 5G ▮▮▮</span>
+          </div>
+          <div class="phone-header">
+            <div class="phone-logo">Stox<span>Kart</span></div>
+            <div class="phone-tag" style="background:#1f7a3a;">Ops · KYC</div>
+          </div>
+          <div class="phone-body">
+            <div style="font-size:10px;color:var(--mute);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Application #SK-7714209</div>
+            <div class="kyc-score">
+              <div class="score-num">87<span class="of">/100</span></div>
+              <div class="score-label">Approval Confidence</div>
+            </div>
+            <div style="font-size:10px;color:var(--mute);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Auto-checks</div>
+            <div class="risk-row">
+              <span class="risk-name">PAN ↔ Aadhaar match</span>
+              <span class="risk-flag ok">OK</span>
+            </div>
+            <div class="risk-row">
+              <span class="risk-name">Address consistency</span>
+              <span class="risk-flag ok">OK</span>
+            </div>
+            <div class="risk-row">
+              <span class="risk-name">Video liveness</span>
+              <span class="risk-flag ok">OK</span>
+            </div>
+            <div class="risk-row">
+              <span class="risk-name">Bank a/c name match</span>
+              <span class="risk-flag warn">REVIEW</span>
+            </div>
+            <div class="risk-row">
+              <span class="risk-name">PEP / sanctions</span>
+              <span class="risk-flag ok">CLEAR</span>
+            </div>
+            <div class="ai-card" style="margin-top:10px;padding:10px;">
+              <span class="ai-badge">AI Note</span>
+              <div class="ai-msg" style="font-size:10px;">Bank holder: "RAJESH K." vs PAN: "RAJESH KUMAR." 94% likely same. Suggest <strong>auto-approve</strong>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-label"><strong>02 ·</strong> Ops KYC scorer</div>
+    </div>
+
+    <!-- MOCKUP 3 -->
+    <div>
+      <div class="mock">
+        <div class="phone-screen">
+          <div class="phone-status">
+            <span>9:41</span>
+            <span>●●● 5G ▮▮▮</span>
+          </div>
+          <div class="phone-header">
+            <div class="phone-logo">Stox<span>Kart</span></div>
+            <div class="phone-tag" style="background:#0a0e1a;border:1px solid var(--accent);">Partner</div>
+          </div>
+          <div class="phone-body">
+            <div style="font-size:10px;color:var(--mute);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">SB Code: SMC-AP-3492 · This month</div>
+            <div class="partner-stat">
+              <div class="partner-stat-label">Pending commission</div>
+              <div class="partner-stat-val">₹1,42,800<span class="delta">↑ 18%</span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+              <div class="partner-stat" style="margin:0;">
+                <div class="partner-stat-label">Leads</div>
+                <div class="partner-stat-val" style="font-size:18px;">47</div>
+              </div>
+              <div class="partner-stat" style="margin:0;">
+                <div class="partner-stat-label">Activated</div>
+                <div class="partner-stat-val" style="font-size:18px;">31<span class="delta">↑ 9%</span></div>
+              </div>
+            </div>
+            <div style="font-size:10px;color:var(--mute);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Live lead pipeline</div>
+            <div class="lead-row">
+              <span class="lead-name">Priya S.</span>
+              <span class="lead-status hot">VIDEO KYC</span>
+            </div>
+            <div class="lead-row">
+              <span class="lead-name">Anil R.</span>
+              <span class="lead-status warm">PAN PENDING</span>
+            </div>
+            <div class="lead-row">
+              <span class="lead-name">Kavya N.</span>
+              <span class="lead-status won">ACTIVATED</span>
+            </div>
+            <div class="lead-row">
+              <span class="lead-name">Vikram T.</span>
+              <span class="lead-status hot">eSIGN</span>
+            </div>
+            <div class="ai-card" style="margin-top:10px;padding:10px;">
+              <span class="ai-badge">AI Nudge</span>
+              <div class="ai-msg" style="font-size:10px;">Priya is stuck on Video KYC for 3hrs. <strong>Call her now</strong> — high conversion window.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-label"><strong>03 ·</strong> Partner cockpit</div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD STACK -->
+<section class="build">
+  <div class="build-inner">
+    <div class="section-label">/ How it gets built</div>
+    <h2>A <em>90-day plan</em>, scoped to ship the first measurable win in 30.</h2>
+    <div class="build-grid">
+      <div class="build-col">
+        <h4>Days 0-30 · Diagnose</h4>
+        <ul>
+          <li>Instrument the existing eKYC funnel end-to-end (Mixpanel/Amplitude) — most broking platforms don't have stage-level drop-off in one place</li>
+          <li>Pull last 90 days of failed onboardings, cluster failure reasons</li>
+          <li>Shadow 5 sub-brokers and 5 ops agents to map the real workflow vs the documented one</li>
+          <li>Ship: a single funnel dashboard + the top 3 friction hypotheses, prioritised by recoverable revenue</li>
+        </ul>
+      </div>
+      <div class="build-col">
+        <h4>Days 30-60 · Ship the Companion</h4>
+        <ul>
+          <li>Stage 1 of the AI Companion live on the top friction point (likely Aadhaar OTP / Video KYC)</li>
+          <li>Branch / video-KYC fallback flow integrated with existing SMC branch network — turning a moat into a feature</li>
+          <li>A/B test against the current flow; target 8-12% lift in stage-2 → stage-3 conversion</li>
+        </ul>
+      </div>
+      <div class="build-col">
+        <h4>Days 60-90 · Scale + Partner</h4>
+        <ul>
+          <li>Roll Companion to all stages; ship Ops KYC scorer to deflect ~40% of manual review queue</li>
+          <li>Partner cockpit MVP for top 200 sub-brokers — live lead status, AI nudges, near-real-time commission visibility</li>
+          <li>Compress payout cycle from 30-45 days towards 7-day rolling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics">
+  <div class="section-label">/ How we'll know it worked</div>
+  <h2>The <em>five KPIs</em> in the JD, with concrete targets.</h2>
+  <p class="metrics-sub">Each target benchmarked against industry data and what's plausibly recoverable from the current StoxKart funnel within two quarters.</p>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div>
+        <div class="kpi-name">eKYC success rate</div>
+        <div class="kpi-headline">Stage-2 to stage-3 conversion via Companion intervention.</div>
+        <div class="kpi-base">Baseline: industry ~40-50%</div>
+      </div>
+      <div>
+        <div class="kpi-delta"><span class="arrow">↑</span> 12pp</div>
+      </div>
+    </div>
+    <div class="kpi">
+      <div>
+        <div class="kpi-name">Lead-to-account conversion</div>
+        <div class="kpi-headline">Time-to-activation collapsed from 24hr+ to under 30min for clean apps.</div>
+        <div class="kpi-base">Baseline: 3-4 working days</div>
+      </div>
+      <div>
+        <div class="kpi-delta"><span class="arrow">↓</span> 80%</div>
+      </div>
+    </div>
+    <div class="kpi">
+      <div>
+        <div class="kpi-name">Partner activation</div>
+        <div class="kpi-headline">SB code go-live time, via automated KYC + digitised agreements.</div>
+        <div class="kpi-base">Baseline: 2-3 weeks</div>
+      </div>
+      <div>
+        <div class="kpi-delta"><span class="arrow">↓</span> 70%</div>
+      </div>
+    </div>
+    <div class="kpi">
+      <div>
+        <div class="kpi-name">Partner-attributed AUM</div>
+        <div class="kpi-headline">Lift from cockpit-driven nudges and faster commission visibility.</div>
+        <div class="kpi-base">Baseline: current month</div>
+      </div>
+      <div>
+        <div class="kpi-delta"><span class="arrow">↑</span> 15%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="about-inner">
+    <div>
+      <div class="section-label">/ Why I built this</div>
+      <h2>I'd rather <em>show</em> than tell.</h2>
+    </div>
+    <div class="about-body">
+      <p>I'm <strong>Harshit Mittal</strong>, currently a Senior PM at UKG owning the Ready Learning platform. Before that, I was on the core platform team at Nutrabay, where I built our <strong>marketplace seller platform</strong> — automated KYC/FSSAI verification, commission engine, NLP-powered compliance, and a seller cockpit. The patterns are uncannily similar to what SMC needs to ship for sub-brokers.</p>
+      <p>This proposal was scoped, designed, and built in a focused session — using the same prototype-first workflow I bring to every PM problem. I write PRDs after I've validated the shape of the solution, not before.</p>
+      <p>The three artifacts below sit on my portfolio. None of them are throwaway demos — each is a working AI product solving a real problem.</p>
+      <div class="portfolio">
+        <div class="portfolio-item">
+          <h5>SchemeWise</h5>
+          <p>Conversational AI advisor for Indian government savings schemes (PPF, SSY, NPS). Self-serve from query to recommendation.</p>
+        </div>
+        <div class="portfolio-item">
+          <h5>LabDecode</h5>
+          <p>AI lab report analyzer that reads medical reports, extracts biomarkers, and returns plain-English insights.</p>
+        </div>
+        <div class="portfolio-item">
+          <h5>Nutrabay Seller Platform</h5>
+          <p>Marketplace prototype: automated KYC, commission engine, NLP compliance, seller scoring.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section class="footer">
+  <div class="footer-inner">
+    <h3>I'd love to walk through this with the StoxKart team. <em>15 minutes is all I'd need.</em></h3>
+    <div class="footer-contact">
+      <div>Harshit Mittal</div>
+      <div><a href="mailto:harshit.mittal2904@gmail.com">harshit.mittal2904@gmail.com</a></div>
+      <div><a href="https://harshitmittal.in">harshitmittal.in</a></div>
+      <div><a href="https://linkedin.com/in/harshitmittal2904">linkedin.com/in/harshitmittal2904</a></div>
+    </div>
+  </div>
+  <div class="footer-meta" style="max-width:1280px;margin:48px auto 0;">
+    <span>Built for SMC Global Securities · Not affiliated with SMC</span>
+    <span>v1.0 · For Hina Choudhary</span>
+  </div>
+</section>
+
+</body>
+</html>
