@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StoxKart eKYC Redesign — A Self-Initiated PM Exercise · Harshit Mittal</title>
+<meta name="description" content="A complete product proposal for SMC Global's StoxKart — closing the onboarding gap with Zerodha and Groww. Research, mockups, architecture, 90-day plan." />
+
+<!-- OpenGraph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Closing the 15-minute gap — A speculative redesign of StoxKart's onboarding" />
+<meta property="og:description" content="A complete product proposal for SMC Global's discount broking arm. Six mobile screens, an ops cockpit, a 90-day plan, three days of deep research. Built before applying." />
+<meta property="og:url" content="https://harshitmittal.in/smc/" />
+<meta property="og:site_name" content="Harshit Mittal" />
+<meta property="og:image" content="https://harshitmittal.in/smc/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Closing the 15-minute gap — A speculative redesign of StoxKart's onboarding" />
+<meta name="twitter:description" content="A complete product proposal for SMC Global's discount broking arm. Built before applying." />
+<meta name="twitter:image" content="https://harshitmittal.in/smc/og-image.png" />
+<meta name="author" content="Harshit Mittal" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0908;
+    --ink: #14110f;
+    --ink-2: #1c1814;
+    --paper: #f4ede4;
+    --paper-2: #e8dfd1;
+    --rule: rgba(244, 237, 228, 0.12);
+    --rule-2: rgba(244, 237, 228, 0.2);
+    --mute: rgba(244, 237, 228, 0.55);
+    --mute-2: rgba(244, 237, 228, 0.75);
+    --accent: #ff6b3d;
+    --accent-2: #ffb84d;
+    --accent-soft: rgba(255, 107, 61, 0.15);
+    --green: #88c997;
+    --red: #ff5e5e;
+    /* StoxKart brand approximation */
+    --sk-navy: #0a2540;
+    --sk-yellow: #ffc629;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--void);
+    color: var(--paper);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: var(--void); }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: rgba(10, 9, 8, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-brand {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-brand::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .nav-back {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--mute-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .nav-back:hover { color: var(--accent); }
+  @media (max-width: 600px) { .nav-inner { padding: 14px 20px; } }
+
+  /* ============ WRAP ============ */
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .wrap-narrow {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .wrap-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  @media (max-width: 600px) {
+    .wrap, .wrap-narrow, .wrap-wide { padding: 0 20px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 140px 0 96px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-soft), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mute);
+    margin-bottom: 32px;
+  }
+  .hero-meta span:not(:last-child)::after {
+    content: '·';
+    margin-left: 24px;
+    color: var(--rule-2);
+  }
+  .hero-meta .accent { color: var(--accent); }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 7vw, 88px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    max-width: 1000px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .hero-deck {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--mute-2);
+    max-width: 720px;
+    margin-bottom: 40px;
+  }
+  .hero-disclaimer {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--mute-2);
+    max-width: 800px;
+    border-radius: 0 4px 4px 0;
+  }
+  .hero-disclaimer strong { color: var(--accent); font-weight: 600; }
+
+  /* ============ FACTSHEET ============ */
+  .factsheet {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    margin: 64px 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .fact {
+    padding: 28px 24px;
+    border-right: 1px solid var(--rule);
+  }
+  .fact:last-child { border-right: none; }
+  .fact .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .fact .val {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--paper);
+    line-height: 1.3;
+  }
+  .fact .val small {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--mute);
+    font-weight: 400;
+    margin-top: 4px;
+  }
+  @media (max-width: 720px) {
+    .factsheet { grid-template-columns: repeat(2, 1fr); }
+    .fact:nth-child(2n) { border-right: none; }
+    .fact:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  }
+
+  /* ============ SECTION ============ */
+  .section {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section:last-of-type { border-bottom: none; }
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .section h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+    max-width: 900px;
+  }
+  .section h2 em { font-style: italic; color: var(--accent); }
+  .section h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 56px 0 16px;
+    color: var(--paper);
+  }
+  .section h3 em { font-style: italic; color: var(--accent); }
+  .section h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.3;
+    margin: 32px 0 12px;
+    color: var(--paper);
+  }
+  .section p {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    color: var(--mute-2);
+    max-width: 780px;
+  }
+  .section p strong { color: var(--paper); font-weight: 600; }
+  .section p em { font-style: italic; color: var(--paper); }
+  .section a {
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1px;
+  }
+  .section a:hover { color: var(--paper); }
+  .section ul, .section ol {
+    margin: 16px 0 24px 24px;
+    max-width: 780px;
+  }
+  .section li {
+    margin-bottom: 12px;
+    line-height: 1.65;
+    color: var(--mute-2);
+    font-size: 17px;
+  }
+  .section li strong { color: var(--paper); }
+
+  .lede::first-letter {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    float: left;
+    line-height: 0.85;
+    margin: 8px 12px 0 0;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* ============ PULL QUOTE ============ */
+  .pullquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.3;
+    color: var(--paper);
+    border-left: 3px solid var(--accent);
+    padding: 16px 0 16px 32px;
+    margin: 48px 0;
+    max-width: 800px;
+  }
+
+  /* ============ INSIGHT BOX ============ */
+  .insight {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 28px;
+    margin: 32px 0;
+    max-width: 800px;
+    position: relative;
+  }
+  .insight-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .insight-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .insight p {
+    margin-bottom: 14px;
+    font-size: 16px;
+  }
+  .insight p:last-child { margin-bottom: 0; }
+
+  /* ============ STAT GRID ============ */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin: 40px 0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) { .stat-grid { grid-template-columns: 1fr; } }
+  .stat-card {
+    background: var(--void);
+    padding: 32px 28px;
+  }
+  .stat-card .num {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 500;
+    color: var(--paper);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+  }
+  .stat-card .num small {
+    font-size: 28px;
+    color: var(--mute);
+  }
+  .stat-card .lbl {
+    font-size: 14px;
+    color: var(--mute-2);
+    line-height: 1.5;
+  }
+  .stat-card .lbl strong { color: var(--paper); }
+  .stat-card .source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 12px;
+  }
+
+  /* ============ COMPARISON TABLE ============ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 14px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  thead { background: var(--ink); }
+  th {
+    text-align: left;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px solid var(--rule);
+  }
+  td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.55;
+    vertical-align: top;
+    color: var(--mute-2);
+    font-size: 14px;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 600; color: var(--paper); }
+
+  /* ============ ARCHITECTURE DIAGRAM ============ */
+  .arch-wrap {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 32px;
+    margin: 40px 0;
+    overflow-x: auto;
+  }
+  .arch-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+  }
+  .arch-svg {
+    width: 100%;
+    height: auto;
+    min-width: 800px;
+  }
+
+  /* ============ FUNNEL ============ */
+  .funnel {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .funnel-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .funnel-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .funnel-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 80px 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .funnel-row:last-child { border-bottom: none; }
+  .funnel-row .stage {
+    font-weight: 600;
+    color: var(--paper);
+    font-size: 13px;
+  }
+  .funnel-row .stage span {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mute);
+    font-weight: 400;
+    margin-top: 3px;
+  }
+  .funnel-bar {
+    height: 28px;
+    background: rgba(244, 237, 228, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .funnel-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    color: var(--void);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .funnel-fill.warn {
+    background: linear-gradient(90deg, var(--red) 0%, #ff8a47 100%);
+  }
+  .funnel-conv {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--mute-2);
+    font-weight: 600;
+    text-align: right;
+  }
+  .funnel-drop {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+    text-align: right;
+  }
+  @media (max-width: 720px) {
+    .funnel-row { grid-template-columns: 100px 1fr 50px 50px; gap: 8px; font-size: 11px; }
+  }
+
+  /* ============ MOCKUP STRIP ============ */
+  .mockup-section {
+    padding: 96px 0;
+    background: linear-gradient(180deg, var(--void) 0%, var(--ink) 50%, var(--void) 100%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .mockup-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin: 48px 0;
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+  @media (max-width: 1100px) {
+    .mockup-strip { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .mockup-strip { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  }
+
+  .phone {
+    background: #1a1a1a;
+    border-radius: 28px;
+    padding: 6px;
+    box-shadow:
+      0 0 0 1px #2a2a2a,
+      0 20px 40px -10px rgba(0,0,0,0.5);
+    aspect-ratio: 9/19;
+    position: relative;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 14px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    z-index: 10;
+  }
+  .phone-screen {
+    background: var(--sk-navy);
+    border-radius: 22px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    font-size: 9px;
+    display: flex;
+    flex-direction: column;
+  }
+  .ph-status {
+    padding: 8px 12px 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    font-weight: 700;
+    color: white;
+  }
+  .ph-body {
+    flex: 1;
+    padding: 8px 12px 12px;
+    overflow: hidden;
+  }
+  .ph-progress {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .ph-progress-step {
+    flex: 1;
+    height: 2px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 1px;
+  }
+  .ph-progress-step.done { background: var(--sk-yellow); }
+  .ph-progress-step.active {
+    background: var(--sk-yellow);
+    box-shadow: 0 0 6px rgba(255, 198, 41, 0.6);
+  }
+  .ph-stage-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+  .ph-h {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    color: white;
+  }
+  .ph-h em { color: var(--sk-yellow); font-style: italic; }
+  .ph-sub {
+    font-size: 7px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .ph-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 6px;
+    font-size: 8px;
+  }
+  .ph-card-yellow {
+    background: rgba(255,198,41,0.15);
+    border-color: var(--sk-yellow);
+    color: white;
+  }
+  .ph-card-yellow .tag {
+    display: inline-block;
+    background: var(--sk-yellow);
+    color: var(--sk-navy);
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-size: 6px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+  .ph-card .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+    font-size: 7px;
+  }
+  .ph-card .row .lbl { color: rgba(255,255,255,0.5); }
+  .ph-card .row .val { color: white; font-weight: 600; }
+  .ph-btn {
+    background: var(--sk-yellow);
+    color: var(--sk-navy);
+    text-align: center;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 8px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .ph-btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+  }
+  .ph-step-list {
+    font-size: 7px;
+    line-height: 1.6;
+  }
+  .ph-step-list .done { color: var(--sk-yellow); }
+  .ph-step-list .active { color: white; font-weight: 600; }
+  .ph-step-list .pending { color: rgba(255,255,255,0.4); }
+  .ph-orb {
+    width: 60px;
+    height: 60px;
+    margin: 14px auto 12px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--sk-yellow), #ff8a3d, var(--sk-yellow));
+    position: relative;
+    animation: spin 3s linear infinite;
+  }
+  .ph-orb::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--sk-navy);
+    border-radius: 50%;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ph-vkyc {
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+    aspect-ratio: 4/5;
+    position: relative;
+    margin-bottom: 6px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .ph-vkyc::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed rgba(255, 198, 41, 0.5);
+    border-radius: 50%;
+  }
+  .ph-rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(255,68,68,0.2);
+    color: #ff8a82;
+    font-size: 6px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    align-self: flex-start;
+    z-index: 2;
+  }
+  .ph-rec::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .ph-otp {
+    background: white;
+    color: var(--sk-navy);
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-align: center;
+    align-self: center;
+    z-index: 2;
+  }
+  .ph-otp .sm { font-size: 5px; text-transform: uppercase; opacity: 0.6; font-weight: 700; }
+  .ph-otp .otp { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; }
+  .ph-coach {
+    background: var(--sk-yellow);
+    color: var(--sk-navy);
+    padding: 6px 8px;
+    border-radius: 4px;
+    z-index: 2;
+    font-size: 7px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .ph-coach .tag {
+    font-size: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+    margin-bottom: 2px;
+    display: block;
+  }
+  .ph-success {
+    background: linear-gradient(135deg, var(--sk-navy), #1a3d63);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ph-success-emoji { font-size: 22px; margin-bottom: 4px; }
+  .ph-success h5 {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+  }
+  .ph-success h5 em { color: var(--sk-yellow); font-style: italic; }
+  .ph-cid {
+    background: rgba(255,255,255,0.05);
+    border: 1px dashed var(--sk-yellow);
+    border-radius: 4px;
+    padding: 6px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .ph-cid .lbl {
+    font-size: 6px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+  .ph-cid .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    margin-top: 2px;
+  }
+
+  .mockup-caption {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .mockup-caption .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .mockup-caption h5 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .mockup-caption p {
+    font-size: 12px;
+    color: var(--mute);
+    line-height: 1.4;
+  }
+
+  /* ============ TIMELINE 90D ============ */
+  .ninety-day {
+    margin: 48px 0;
+  }
+  .nd-item {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 32px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+    position: relative;
+  }
+  @media (max-width: 720px) {
+    .nd-item { grid-template-columns: 1fr; gap: 12px; padding: 24px; }
+  }
+  .nd-period {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    padding-top: 4px;
+  }
+  .nd-content h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--paper);
+  }
+  .nd-content p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--mute-2);
+    margin-bottom: 0;
+  }
+
+  /* ============ FOOTER ============ */
+  .closer {
+    background: var(--paper);
+    color: var(--void);
+    padding: 96px 32px;
+  }
+  .closer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .closer-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 16px;
+  }
+  .closer h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--void);
+    max-width: 800px;
+  }
+  .closer h3 em { font-style: italic; color: var(--accent); }
+  .closer p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(20, 17, 15, 0.7);
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+  .closer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--void);
+    color: var(--paper);
+    padding: 16px 28px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: transform 0.15s;
+  }
+  .closer-cta:hover { transform: translateY(-2px); background: var(--accent); }
+  .closer-cta::after { content: '→'; }
+  .closer-meta {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(20,17,15,0.1);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(20,17,15,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Misc */
+  .toc {
+    background: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin: 48px 0 0;
+  }
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 600px) { .toc-list { grid-template-columns: 1fr; } }
+  .toc-list li { margin: 0; }
+  .toc-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--mute-2);
+    border-bottom: none;
+    transition: color 0.15s;
+  }
+  .toc-list a:hover { color: var(--accent); }
+  .toc-list a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    min-width: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Harshit Mittal</a>
+    <a href="/" class="nav-back">← all projects</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-meta">
+      <span class="accent">Project № 05</span>
+      <span>Self-initiated PM exercise</span>
+      <span>2026</span>
+      <span>Fintech / Discount Broking</span>
+    </div>
+    <h1>Closing the<br/>15-minute gap.<br/><em>A speculative redesign of StoxKart's onboarding.</em></h1>
+    <p class="hero-deck">A complete product proposal for SMC Global's discount broking arm — research, mockups, architecture, 90-day plan. Built in a focused weekend before applying for their Senior PM role, to demonstrate prototype-first PM work in a regulated environment.</p>
+
+    <div class="hero-disclaimer">
+      <strong>A note on this project.</strong> This is a self-initiated PM exercise. I am not affiliated with SMC Global Securities or StoxKart. The proposal reflects publicly-available information, my own analysis, and conventional fintech architecture. All metrics and funnel numbers are industry benchmarks unless explicitly stated otherwise.
+    </div>
+
+    <div class="factsheet">
+      <div class="fact"><div class="lbl">Role</div><div class="val">Product Manager<small>End-to-end · Self-initiated</small></div></div>
+      <div class="fact"><div class="lbl">Domain</div><div class="val">Discount Broking<small>SMC Global / StoxKart</small></div></div>
+      <div class="fact"><div class="lbl">Built in</div><div class="val">~1 weekend<small>Research + design + write</small></div></div>
+      <div class="fact"><div class="lbl">Outcome</div><div class="val">Application<small>Senior PM, SMC Global</small></div></div>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Read time ~12 min · jump to a section</div>
+      <ul class="toc-list">
+        <li><a href="#brief"><span class="num">01</span>The brief</a></li>
+        <li><a href="#research"><span class="num">02</span>The research</a></li>
+        <li><a href="#funnel"><span class="num">03</span>The funnel</a></li>
+        <li><a href="#architecture"><span class="num">04</span>Architecture</a></li>
+        <li><a href="#mockups"><span class="num">05</span>The mockups</a></li>
+        <li><a href="#ops"><span class="num">06</span>Ops cockpit</a></li>
+        <li><a href="#plan"><span class="num">07</span>90-day plan</a></li>
+        <li><a href="#takeaways"><span class="num">08</span>Takeaways</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 — THE BRIEF ============ -->
+<section class="section" id="brief">
+  <div class="wrap-narrow">
+    <div class="section-eyebrow">/ 01 · The brief</div>
+    <h2>Why I built this <em>before</em> applying.</h2>
+    <p class="lede">SMC Global Securities — one of India's oldest broking houses, 35 years old, family-promoted, with 2,400+ sub-brokers across the country — posted a Senior PM role focused on broking platforms, eKYC, CRM, and partner ecosystems. The JD was wide; the company sits at an inflection point, trying to compete with Zerodha and Groww via its discount arm StoxKart, which has been in market since 2017.</p>
+    <p>Standard application material wouldn't tell them anything new about me. So I treated the application as a PM problem in itself: <strong>what's the smallest piece of real, original work I could produce that demonstrates I'd be useful from day one?</strong></p>
+    <p>The answer, for a fintech PM role, was a focused product proposal addressing two of the five JD pillars — eKYC and partner ecosystem — with mockups, a 90-day plan, and KPI targets. The kind of artefact a hiring manager actually has time to read.</p>
+
+    <div class="insight">
+      <div class="insight-tag">— The wedge hypothesis</div>
+      <p>StoxKart's site advertises <em>"15-minute account opening."</em> Public reviews suggest the reality is 24 hours to 4 working days. That gap is where the customer goes to Zerodha or Groww — both of whom solved this years ago.</p>
+      <p>The JD's eKYC pillar, taken alone, was the highest-leverage problem to attack. Fix that, and several of the JD's other pillars (CRM, partner ecosystem, lifecycle) become tractable as a consequence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 — THE RESEARCH ============ -->
+<section class="section" id="research">
+  <div class="wrap-narrow">
+    <div class="section-eyebrow">/ 02 · The research</div>
+    <h2>The infrastructure is <em>commoditised.</em> The differentiation is product.</h2>
+    <p>The most important insight from the research phase was counter-intuitive. Zerodha and Groww don't have a secret KYC pipeline. Every SEBI-registered broker uses the same six government-provided rails:</p>
+
+    <ul>
+      <li><strong>DigiLocker</strong> — Government of India, fetches digitally-signed Aadhaar XML</li>
+      <li><strong>UIDAI Aadhaar OTP</strong> — direct identity verification (allowed since SEBI April 2020 circular)</li>
+      <li><strong>PAN / NSDL</strong> — PAN database authenticity check</li>
+      <li><strong>KRA / CKYC</strong> — central KYC repositories (CVL, CAMS, NSDL, Karvy)</li>
+      <li><strong>IMPS Penny Drop</strong> — bank account verification via ₹1 transfer with name match</li>
+      <li><strong>Aadhaar eSign</strong> — Digio / NSDL Instigo for legally-binding digital signature</li>
+    </ul>
+
+    <p>What separates Zerodha's 5-minute account from SMC's 4-day account isn't infrastructure. <strong>It's product orchestration</strong> — how cleverly you stitch the rails together, how aggressively you parallelise the API calls, how high you set the auto-approval confidence threshold, and how mobile-native the UI feels. Every one of those is a PM problem.</p>
+
+    <div class="pullquote">
+      "When the rails are commoditised, the moat isn't in the technology. It's in the product team that orchestrates them."
+    </div>
+
+    <h3>The competitive landscape, mapped</h3>
+    <p>Three brokers dominate Indian retail broking. Each represents a radically different theory of how trust gets built in financial services:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lever</th>
+          <th>Zerodha</th>
+          <th>Groww</th>
+          <th>Upstox</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Hero channel</td><td>Education + SEO (Varsity)</td><td>App-store discovery + content</td><td>Mass TV (IPL, ₹145Cr deal)</td></tr>
+        <tr><td>Hook product</td><td>Cheap F&O for serious traders</td><td>Easy mutual funds for beginners</td><td>Awareness-driven sign-up</td></tr>
+        <tr><td>Funded by</td><td>Bootstrapped, profitable since day 1</td><td>VC (Sequoia, Tiger, Y Combinator)</td><td>VC (Tiger Global, Ratan Tata)</td></tr>
+        <tr><td>Customer profile</td><td>Serious F&O / equity trader</td><td>First-time MF investor → trader</td><td>Tier 2/3 first-time investor</td></tr>
+        <tr><td>Active users</td><td>~7.3M</td><td>~9.9M</td><td>~10M+ unique codes</td></tr>
+        <tr><td>CAC profile</td><td>~₹6,500 · 3-month payback</td><td>Mid · declining as brand compounds</td><td>High · ~66% of costs on acquisition</td></tr>
+      </tbody>
+    </table>
+
+    <p>The conclusion: <strong>SMC can't credibly run any of these three plays.</strong> They don't have Zerodha's five-year horizon, Groww's VC scale, or Upstox's ad budget. The right strategy was a fourth path — using SMC's actual structural assets as the engine, not envying what discount-only competitors had. That structural asset is the 2,400+ sub-broker network, which connects back to fixing onboarding for an entirely different reason.</p>
+  </div>
+</section>
+
+<!-- ============ 03 — THE FUNNEL ============ -->
+<section class="section" id="funnel">
+  <div class="wrap">
+    <div class="section-eyebrow">/ 03 · The funnel</div>
+    <h2>Where customers <em>actually</em> drop off.</h2>
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <p>The mapping below is benchmark — what a typical Indian discount broker funnel looks like for 1,000 users entering the flow. Two stages dominate the loss: <strong>DigiLocker / Aadhaar OTP (Step 02)</strong> and <strong>Video KYC (Step 04b)</strong>. Together they account for ~46% of total funnel loss.</p>
+    </div>
+
+    <div class="funnel">
+      <div class="funnel-title">Onboarding funnel · industry benchmark</div>
+      <div class="funnel-sub">N = 1,000 starts · drop-off mapping</div>
+      <div class="funnel-row">
+        <div class="stage">Mobile + Email<span>Step 01</span></div>
+        <div class="funnel-bar"><div class="funnel-fill" style="width:100%;">1,000</div></div>
+        <div class="funnel-conv">100%</div>
+        <div class="funnel-drop">—</div>
+      </div>
+      <div class="funnel-row">
+        <div class="stage">PAN + KRA<span>Step 02</span></div>
+        <div class="funnel-bar"><div class="funnel-fill" style="width:88%;">880</div></div>
+        <div class="funnel-conv">88%</div>
+        <div class="funnel-drop">↓ 120</div>
+      </div>
+      <div class="funnel-row">
+        <div class="stage">DigiLocker / Aadhaar<span>Step 03 — high loss</span></div>
+        <div class="funnel-bar"><div class="funnel-fill warn" style="width:72%;">718</div></div>
+        <div class="funnel-conv">72%</div>
+        <div class="funnel-drop">↓ 162</div>
+      </div>
+      <div class="funnel-row">
+        <div class="stage">Bank + Penny<span>Step 04a</span></div>
+        <div class="funnel-bar"><div class="funnel-fill" style="width:68%;">683</div></div>
+        <div class="funnel-conv">68%</div>
+        <div class="funnel-drop">↓ 35</div>
+      </div>
+      <div class="funnel-row">
+        <div class="stage">Video KYC<span>Step 04b — high loss</span></div>
+        <div class="funnel-bar"><div class="funnel-fill warn" style="width:58%;">578</div></div>
+        <div class="funnel-conv">58%</div>
+        <div class="funnel-drop">↓ 105</div>
+      </div>
+      <div class="funnel-row">
+        <div class="stage">eSign + Activate<span>Step 05–06</span></div>
+        <div class="funnel-bar"><div class="funnel-fill" style="width:55%;">552</div></div>
+        <div class="funnel-conv">55%</div>
+        <div class="funnel-drop">↓ 26</div>
+      </div>
+    </div>
+
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <h3>Where SMC almost certainly bleeds vs Zerodha</h3>
+      <p>You can't audit SMC's flow until you're inside, but the public evidence — site advertising 15-minute opening, reviews showing 24hrs to 4 working days — points to specific, diagnosable failures. These are <em>hypotheses</em>, not accusations:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>What SMC probably does</th>
+            <th>What Zerodha/Groww do</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>DigiLocker offered, but flow still asks for separate uploads "just in case"</td><td>If DigiLocker succeeds, no further uploads. Conditional UI.</td><td>+3 min, ~15% drop</td></tr>
+          <tr><td>Hard auto-approve threshold; most apps go to a human ops queue</td><td>Confidence-scored auto-approval; humans only see edge cases</td><td>Hours-to-days vs minutes</td></tr>
+          <tr><td>Sequential API calls — PAN, then Aadhaar, then bank, then video</td><td>Parallelised where independent (penny drop fires while video uploads)</td><td>+30-90s perceived wait</td></tr>
+          <tr><td>Mobile flow is a responsive desktop form</td><td>Native-feeling stepped flow; one decision per screen</td><td>~20% of total funnel loss is pure UX</td></tr>
+          <tr><td>If Aadhaar OTP fails, "please try again later"</td><td>Branch fallback, alternate OVD, scheduled callback</td><td>100% of these users go to a competitor</td></tr>
+          <tr><td>Video KYC happens with no preview, no instructions</td><td>Real-time guidance, "great, hold for 3 seconds"</td><td>Higher retake rate, drop-off</td></tr>
+        </tbody>
+      </table>
+
+      <div class="insight">
+        <div class="insight-tag">— The opportunity, restated</div>
+        <p>None of these gaps require new infrastructure. They're all <strong>orchestration, UX, and decision-threshold problems.</strong> A good PM with a focused engineering team can move the needle materially in a quarter. That's the size of the prize.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 — ARCHITECTURE ============ -->
+<section class="section" id="architecture">
+  <div class="wrap">
+    <div class="section-eyebrow">/ 04 · Architecture</div>
+    <h2>The 7-step <em>reference flow.</em></h2>
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <p>This is the architecture of how a clean Zerodha-class onboarding works — reconstructed from Zerodha's public Z-Connect post on customer verification, SEBI's April 2020 circular on online KYC, and Digio/NSDL's documentation. The order and logic are accurate.</p>
+    </div>
+
+    <div class="arch-wrap">
+      <div class="arch-title">/ Architecture · The 7-step reference flow with timing and drop-off</div>
+      <svg class="arch-svg" viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg" font-family="DM Sans, sans-serif">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="#ff6b3d"/>
+            <stop offset="1" stop-color="#ffb84d"/>
+          </linearGradient>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L9,3 z" fill="#ff6b3d"/>
+          </marker>
+        </defs>
+
+        <!-- Top row: customer-facing -->
+        <text x="20" y="30" font-size="11" fill="rgba(244,237,228,0.55)" letter-spacing="2" text-transform="uppercase">CUSTOMER-FACING (~10 MIN)</text>
+
+        <!-- Step boxes -->
+        <g>
+          <!-- 01 -->
+          <rect x="20" y="50" width="135" height="90" rx="6" fill="#1c1814" stroke="rgba(244,237,228,0.2)"/>
+          <text x="32" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">01 · 30s</text>
+          <text x="32" y="90" font-size="13" fill="#f4ede4" font-weight="600">PAN + Email</text>
+          <text x="32" y="105" font-size="10" fill="rgba(244,237,228,0.55)">PAN/NSDL API</text>
+          <text x="32" y="125" font-size="10" fill="#88c997" font-weight="600">Drop: ~12%</text>
+          <line x1="155" y1="95" x2="178" y2="95" stroke="#ff6b3d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 02 -->
+          <rect x="180" y="50" width="135" height="90" rx="6" fill="#2a1f12" stroke="#ff6b3d" stroke-width="1.5"/>
+          <text x="192" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">02 · 60s · CRITICAL</text>
+          <text x="192" y="90" font-size="13" fill="#f4ede4" font-weight="600">DigiLocker</text>
+          <text x="192" y="105" font-size="10" fill="rgba(244,237,228,0.55)">UIDAI / DigiLocker</text>
+          <text x="192" y="125" font-size="10" fill="#ff5e5e" font-weight="600">Drop: ~28%</text>
+          <line x1="315" y1="95" x2="338" y2="95" stroke="#ff6b3d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 03 - silent verification -->
+          <rect x="340" y="50" width="135" height="90" rx="6" fill="#1c1814" stroke="rgba(244,237,228,0.2)" stroke-dasharray="3,3"/>
+          <text x="352" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">03 · 5s · INVISIBLE</text>
+          <text x="352" y="90" font-size="13" fill="#f4ede4" font-weight="600">Cross-verify</text>
+          <text x="352" y="105" font-size="10" fill="rgba(244,237,228,0.55)">PAN ↔ Aadhaar match</text>
+          <text x="352" y="125" font-size="10" fill="#88c997" font-weight="600">Drop: invisible</text>
+          <line x1="475" y1="95" x2="498" y2="95" stroke="#ff6b3d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 04 -->
+          <rect x="500" y="50" width="135" height="90" rx="6" fill="#1c1814" stroke="rgba(244,237,228,0.2)"/>
+          <text x="512" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">04 · 30s</text>
+          <text x="512" y="90" font-size="13" fill="#f4ede4" font-weight="600">Bank + Penny</text>
+          <text x="512" y="105" font-size="10" fill="rgba(244,237,228,0.55)">IMPS API · ₹1 drop</text>
+          <text x="512" y="125" font-size="10" fill="#88c997" font-weight="600">Drop: ~9%</text>
+          <line x1="635" y1="95" x2="658" y2="95" stroke="#ff6b3d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 05 - VKYC -->
+          <rect x="660" y="50" width="135" height="90" rx="6" fill="#2a1f12" stroke="#ff6b3d" stroke-width="1.5"/>
+          <text x="672" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">05 · 90s · CRITICAL</text>
+          <text x="672" y="90" font-size="13" fill="#f4ede4" font-weight="600">Video IPV</text>
+          <text x="672" y="105" font-size="10" fill="rgba(244,237,228,0.55)">In-app · liveness</text>
+          <text x="672" y="125" font-size="10" fill="#ff5e5e" font-weight="600">Drop: ~18%</text>
+          <line x1="795" y1="95" x2="818" y2="95" stroke="#ff6b3d" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 06 - eSign -->
+          <rect x="820" y="50" width="135" height="90" rx="6" fill="#1c1814" stroke="rgba(244,237,228,0.2)"/>
+          <text x="832" y="70" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">06 · 45s</text>
+          <text x="832" y="90" font-size="13" fill="#f4ede4" font-weight="600">eSign</text>
+          <text x="832" y="105" font-size="10" fill="rgba(244,237,228,0.55)">Digio / NSDL</text>
+          <text x="832" y="125" font-size="10" fill="#88c997" font-weight="600">Drop: ~7%</text>
+        </g>
+
+        <!-- Bottom: backend layer -->
+        <text x="20" y="220" font-size="11" fill="rgba(244,237,228,0.55)" letter-spacing="2">BACKEND / OPS (BACKGROUND)</text>
+
+        <!-- Government rails -->
+        <g>
+          <rect x="20" y="240" width="180" height="60" rx="4" fill="#0a2540" stroke="#ffc629"/>
+          <text x="35" y="262" font-size="10" fill="#ffc629" font-weight="600" letter-spacing="1">GOV RAILS</text>
+          <text x="35" y="280" font-size="12" fill="white" font-weight="600">DigiLocker · UIDAI</text>
+          <text x="35" y="294" font-size="11" fill="rgba(255,255,255,0.7)">PAN/NSDL · KRA · CKYC</text>
+
+          <rect x="220" y="240" width="180" height="60" rx="4" fill="#0a2540" stroke="#ffc629"/>
+          <text x="235" y="262" font-size="10" fill="#ffc629" font-weight="600" letter-spacing="1">BANK / VENDOR</text>
+          <text x="235" y="280" font-size="12" fill="white" font-weight="600">IMPS Penny Drop</text>
+          <text x="235" y="294" font-size="11" fill="rgba(255,255,255,0.7)">Digio · NSDL Instigo</text>
+
+          <rect x="420" y="240" width="240" height="60" rx="4" fill="#1c1814" stroke="#ff6b3d"/>
+          <text x="435" y="262" font-size="10" fill="#ff6b3d" font-weight="600" letter-spacing="1">CONFIDENCE SCORER · LIVE</text>
+          <text x="435" y="280" font-size="12" fill="#f4ede4" font-weight="600">Auto-approve threshold: 87%</text>
+          <text x="435" y="294" font-size="11" fill="rgba(244,237,228,0.7)">Edge cases → manual queue</text>
+
+          <rect x="680" y="240" width="180" height="60" rx="4" fill="#1c1814" stroke="rgba(244,237,228,0.2)"/>
+          <text x="695" y="262" font-size="10" fill="rgba(244,237,228,0.55)" font-weight="600" letter-spacing="1">OPS REVIEW</text>
+          <text x="695" y="280" font-size="12" fill="#f4ede4" font-weight="600">AI-assisted maker</text>
+          <text x="695" y="294" font-size="11" fill="rgba(244,237,228,0.7)">Checker queue · &lt;15</text>
+
+          <rect x="880" y="240" width="180" height="60" rx="4" fill="#88c997" opacity="0.15" stroke="#88c997"/>
+          <text x="895" y="262" font-size="10" fill="#88c997" font-weight="600" letter-spacing="1">ACTIVATION</text>
+          <text x="895" y="280" font-size="12" fill="#f4ede4" font-weight="600">Client ID issued</text>
+          <text x="895" y="294" font-size="11" fill="rgba(244,237,228,0.7)">Funds + watchlist</text>
+        </g>
+
+        <!-- AI Layer -->
+        <text x="20" y="360" font-size="11" fill="rgba(244,237,228,0.55)" letter-spacing="2">AI INTERVENTION LAYER</text>
+
+        <g>
+          <rect x="20" y="380" width="320" height="80" rx="6" fill="#2a1f12" stroke="#ffb84d" stroke-width="1.5"/>
+          <text x="35" y="402" font-size="10" fill="#ffb84d" font-weight="700" letter-spacing="1">✦ SK COACH · STAGE 02</text>
+          <text x="35" y="420" font-size="13" fill="#f4ede4" font-weight="600">DigiLocker recovery</text>
+          <text x="35" y="438" font-size="11" fill="rgba(244,237,228,0.7)">If OTP fails: branch fallback,</text>
+          <text x="35" y="452" font-size="11" fill="rgba(244,237,228,0.7)">alternate OVD, scheduled callback</text>
+
+          <rect x="360" y="380" width="320" height="80" rx="6" fill="#2a1f12" stroke="#ffb84d" stroke-width="1.5"/>
+          <text x="375" y="402" font-size="10" fill="#ffb84d" font-weight="700" letter-spacing="1">✦ SK COACH · STAGE 05</text>
+          <text x="375" y="420" font-size="13" fill="#f4ede4" font-weight="600">Video KYC live coaching</text>
+          <text x="375" y="438" font-size="11" fill="rgba(244,237,228,0.7)">Lighting · framing · OTP visibility</text>
+          <text x="375" y="452" font-size="11" fill="rgba(244,237,228,0.7)">Real-time, contextual nudges</text>
+
+          <rect x="700" y="380" width="360" height="80" rx="6" fill="#2a1f12" stroke="#ffb84d" stroke-width="1.5"/>
+          <text x="715" y="402" font-size="10" fill="#ffb84d" font-weight="700" letter-spacing="1">✦ SK REVIEWER · BACKEND</text>
+          <text x="715" y="420" font-size="13" fill="#f4ede4" font-weight="600">Confidence-scored auto-approval</text>
+          <text x="715" y="438" font-size="11" fill="rgba(244,237,228,0.7)">Surfaces 1-line summary + recommendation</text>
+          <text x="715" y="452" font-size="11" fill="rgba(244,237,228,0.7)">Reviewer becomes checker, not decider</text>
+        </g>
+
+        <!-- Connecting dotted lines from AI layer to relevant steps -->
+        <line x1="180" y1="380" x2="247" y2="140" stroke="#ffb84d" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <line x1="520" y1="380" x2="727" y2="140" stroke="#ffb84d" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <line x1="880" y1="380" x2="540" y2="300" stroke="#ffb84d" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+
+        <!-- Footer note -->
+        <text x="20" y="510" font-size="11" fill="rgba(244,237,228,0.4)" font-style="italic">* The infrastructure (top + middle layers) is commoditised — every SEBI broker uses the same rails. The differentiation is the AI Coach layer (orange dashed) — small enough to ship in a quarter, defensibly novel.</text>
+      </svg>
+    </div>
+
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <div class="insight">
+        <div class="insight-tag">— What's actually new here</div>
+        <p>Steps 01-06 and the government rails layer are the same as Zerodha's. <strong>The differentiator is the AI Intervention Layer</strong> — the SK Coach on stages 02 and 05, and the SK Reviewer in backend. Each is a small, scoped piece of agentic UX that fires only when the model detects friction. None of these require new infrastructure. They're product orchestration on top of commodity rails.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 — THE MOCKUPS ============ -->
+<section class="section" id="mockups" style="border-bottom: none;">
+  <div class="wrap-wide">
+    <div class="section-eyebrow">/ 05 · The mockups</div>
+    <h2>Six screens. Under <em>five minutes.</em></h2>
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <p>The customer-facing artefact: a redesigned onboarding flow native to StoxKart's actual brand language (deep navy + signature yellow). Each screen does one thing well. Government rails handle verification heavy-lifting in the background; the customer experiences a stepped, native-feeling flow that respects their time.</p>
+    </div>
+
+    <div class="mockup-strip">
+
+      <!-- SCREEN 1 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div style="font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; margin-bottom: 6px;">stox<span style="color:var(--accent);">kart</span>.</div>
+              <div style="background:linear-gradient(135deg, rgba(255,198,41,0.15), rgba(255,107,61,0.15)); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+                <div style="background:var(--sk-yellow); color:var(--sk-navy); font-size: 6px; font-weight: 800; padding: 2px 5px; display:inline-block; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px;">SmartTrader · Zero brokerage</div>
+                <div class="ph-h">A demat account in <em>5 min flat.</em></div>
+                <div class="ph-sub">From SMC Group · Trusted since 1990</div>
+              </div>
+              <div style="font-size: 7px; line-height: 1.7;">
+                <div style="display:flex; gap:6px; align-items:center; padding: 4px 0;"><span style="background:rgba(255,198,41,0.2); color:var(--sk-yellow); width:14px; height:14px; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:8px;">⚡</span> <strong>Instant activation</strong></div>
+                <div style="display:flex; gap:6px; align-items:center; padding: 4px 0;"><span style="background:rgba(255,198,41,0.2); color:var(--sk-yellow); width:14px; height:14px; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:7px;">₹0</span> <strong>Zero brokerage</strong></div>
+                <div style="display:flex; gap:6px; align-items:center; padding: 4px 0;"><span style="background:rgba(255,198,41,0.2); color:var(--sk-yellow); width:14px; height:14px; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:8px;">🛡</span> <strong>SEBI regulated</strong></div>
+              </div>
+              <div class="ph-btn" style="margin-top:auto;">Get started — free</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">01 · Welcome</div>
+          <h5>Set the value upfront</h5>
+          <p>Lead with the 5-minute promise. SMC parent-brand trust signals sit in the background.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 2 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div class="ph-progress">
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step active"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+              </div>
+              <div class="ph-stage-name">Step 02 · PAN + KRA</div>
+              <div class="ph-h">Enter your <em>PAN</em></div>
+              <div class="ph-sub">We'll fetch your verified KYC details — saves you 4 min of typing.</div>
+              <div style="background:rgba(255,255,255,0.08); border-radius:4px; padding:6px 8px; margin-bottom:6px; font-family:'JetBrains Mono',monospace; font-size:9px; color:white;">ABCPM1234D</div>
+              <div class="ph-card ph-card-yellow">
+                <div class="tag">✦ Found · CKYC matched</div>
+                <div style="font-family: 'Fraunces', serif; font-size: 10px; font-weight: 600; margin-bottom: 4px;">Welcome back, Harshit</div>
+                <div class="row"><span class="lbl">DOB</span><span class="val">29 Apr 96</span></div>
+                <div class="row"><span class="lbl">Address</span><span class="val">Delhi</span></div>
+                <div class="row"><span class="lbl">Source</span><span class="val">CVL KRA</span></div>
+              </div>
+              <div class="ph-btn" style="margin-top:auto;">Confirm & continue</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">02 · PAN + KRA magic</div>
+          <h5>"You're already KYC'd"</h5>
+          <p>Single highest-leverage screen. Most users have CKYC'd before — turn it into delight.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 3 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div class="ph-progress">
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step active"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+              </div>
+              <div class="ph-stage-name">Step 03 · DigiLocker</div>
+              <div class="ph-h">Verify with <em>DigiLocker</em></div>
+              <div class="ph-sub">A government service. We'll fetch Aadhaar securely.</div>
+              <div class="ph-card" style="display:flex; gap:6px; align-items:center;">
+                <div style="background:linear-gradient(135deg, #1a73e8, #0d47a1); width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:white;">DL</div>
+                <div>
+                  <div style="font-size:9px; font-weight:700; color:white;">DigiLocker</div>
+                  <div style="font-size:6px; color:rgba(255,255,255,0.5);">meity.gov.in</div>
+                </div>
+                <div style="margin-left:auto; background:rgba(255,198,41,0.2); color:var(--sk-yellow); font-size:6px; padding:1px 4px; border-radius:2px; font-weight:700;">GOV</div>
+              </div>
+              <div class="ph-step-list" style="background:rgba(255,255,255,0.05); padding:6px; border-radius:4px; margin-bottom:6px;">
+                <div class="done">✓ Aadhaar (signed)</div>
+                <div class="done">✓ Full name</div>
+                <div class="done">✓ Photograph</div>
+                <div class="done">✓ Address</div>
+              </div>
+              <div class="ph-card-yellow" style="padding:6px; border-radius:4px; font-size:7px; line-height:1.4; margin-bottom:6px;">
+                🔒 We never see your Aadhaar number. SEBI-mandated, encrypted.
+              </div>
+              <div class="ph-btn" style="background:#1a73e8; color:white;">Continue with DigiLocker</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">03 · DigiLocker</div>
+          <h5>Government rails do the work</h5>
+          <p>Single tap. No upload, no OCR, no forgery risk. Trust badge front and center.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 4 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen" style="background:#000;">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div class="ph-progress">
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step active"></div>
+                <div class="ph-progress-step"></div>
+                <div class="ph-progress-step"></div>
+              </div>
+              <div class="ph-stage-name">Step 04 · Video KYC</div>
+              <div class="ph-h">Quick <em>video selfie</em></div>
+              <div class="ph-sub" style="margin-bottom:8px;">Hold up the OTP card. We'll do the rest.</div>
+              <div class="ph-vkyc">
+                <span class="ph-rec">REC · 00:04</span>
+                <div class="ph-otp">
+                  <div class="sm">Show OTP</div>
+                  <div class="otp">7429</div>
+                </div>
+                <div class="ph-coach">
+                  <span class="tag">✦ SK Coach · Live</span>
+                  Perfect lighting. A bit higher — yes, like that.
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; margin-bottom:6px;">
+                <div style="background:rgba(136,201,151,0.15); border:1px solid var(--green); padding:4px; text-align:center; font-size:7px; font-weight:600; color:#88c997; border-radius:3px;">✓ Light</div>
+                <div style="background:rgba(136,201,151,0.15); border:1px solid var(--green); padding:4px; text-align:center; font-size:7px; font-weight:600; color:#88c997; border-radius:3px;">✓ Match</div>
+                <div style="background:rgba(255,198,41,0.15); border:1px solid var(--sk-yellow); padding:4px; text-align:center; font-size:7px; font-weight:600; color:var(--sk-yellow); border-radius:3px;">⟳ Live</div>
+              </div>
+              <div class="ph-btn" style="margin-top:auto;">Capture & continue</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">04 · Video KYC + AI Coach</div>
+          <h5>The agentic differentiator</h5>
+          <p>Real-time coaching nudge. The one screen defensibly new vs Zerodha.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 5 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div class="ph-progress">
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step active"></div>
+                <div class="ph-progress-step"></div>
+              </div>
+              <div class="ph-orb"></div>
+              <div style="text-align:center;">
+                <div class="ph-h">Verifying details</div>
+                <div class="ph-sub">~30 seconds</div>
+              </div>
+              <div class="ph-step-list" style="background:rgba(255,255,255,0.05); padding:8px; border-radius:4px; margin-top:6px;">
+                <div class="done" style="display:flex; justify-content:space-between;"><span>✓ PAN ↔ Aadhaar</span><span style="color:rgba(255,255,255,0.4); font-family:'JetBrains Mono',monospace;">2.1s</span></div>
+                <div class="done" style="display:flex; justify-content:space-between;"><span>✓ Bank verified</span><span style="color:rgba(255,255,255,0.4); font-family:'JetBrains Mono',monospace;">3.8s</span></div>
+                <div class="done" style="display:flex; justify-content:space-between;"><span>✓ Sanctions check</span><span style="color:rgba(255,255,255,0.4); font-family:'JetBrains Mono',monospace;">1.4s</span></div>
+                <div class="active" style="display:flex; justify-content:space-between;"><span>⟳ KRA registry</span><span style="color:rgba(255,255,255,0.4); font-family:'JetBrains Mono',monospace;">…</span></div>
+                <div class="pending" style="display:flex; justify-content:space-between;"><span>○ eSign</span><span style="color:rgba(255,255,255,0.4); font-family:'JetBrains Mono',monospace;">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">05 · Auto-verification</div>
+          <h5>The 30s wait, transparent</h5>
+          <p>Behind the scenes: PAN-Aadhaar match, IMPS, sanctions, KRA. Visible builds trust.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 6 -->
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+            <div class="ph-body">
+              <div class="ph-progress">
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+                <div class="ph-progress-step done"></div>
+              </div>
+              <div class="ph-success">
+                <div class="ph-success-emoji">🎉</div>
+                <h5>You're <em>in.</em></h5>
+                <div style="font-size:7px; color:rgba(255,255,255,0.7); margin-top:4px;">Account active · Ready to trade</div>
+              </div>
+              <div class="ph-cid">
+                <div class="lbl">Client ID</div>
+                <div class="val">SK·482·9134</div>
+              </div>
+              <div style="font-size:7px; line-height:1.7;">
+                <div style="display:flex; gap:6px; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="background:var(--sk-yellow); color:var(--sk-navy); width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; flex-shrink:0;">1</span> <span><strong style="color:white;">Add ₹500 to start</strong><br/><span style="color:rgba(255,255,255,0.5);">Free UPI · Instant</span></span></div>
+                <div style="display:flex; gap:6px; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);"><span style="background:var(--sk-yellow); color:var(--sk-navy); width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; flex-shrink:0;">2</span> <span><strong style="color:white;">Build watchlist</strong><br/><span style="color:rgba(255,255,255,0.5);">5 picks for you</span></span></div>
+                <div style="display:flex; gap:6px; padding:4px 0;"><span style="background:var(--sk-yellow); color:var(--sk-navy); width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; flex-shrink:0;">3</span> <span><strong style="color:white;">First trade</strong><br/><span style="color:rgba(255,255,255,0.5);">60s walkthrough</span></span></div>
+              </div>
+              <div class="ph-btn" style="margin-top:6px;">Add money · Start →</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="stage-num">06 · Welcome aboard</div>
+          <h5>Activate the next moment</h5>
+          <p>Don't end at "account opened." End at "place your first trade."</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 — OPS COCKPIT ============ -->
+<section class="section" id="ops">
+  <div class="wrap">
+    <div class="section-eyebrow">/ 06 · The ops cockpit</div>
+    <h2>External polish is half the work. The other half is what the <em>ops team</em> uses every day.</h2>
+    <div class="wrap-narrow" style="padding:0; max-width: 760px; margin-left: 0;">
+      <p>The second design surface was the internal KYC review console. Today, most broker ops teams review applications in spreadsheet-grade UIs — opening a customer record, reading 10 fields, cross-referencing three vendor dashboards, making a manual call. That workflow sets the ceiling on how fast accounts can be approved.</p>
+      <p>The redesign flips the model: <strong>the AI does the cross-referencing first.</strong> It surfaces a one-paragraph summary, a confidence score, and a recommendation. The reviewer becomes a checker on the AI's work, not a primary decider. Real-time funnel data sits below the queue, so the ops team is always aware of where customers are dropping <em>today</em>, not last quarter.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="num">81<small>%</small></div>
+        <div class="lbl"><strong>Auto-approval rate</strong> on clean applications, with human review reserved for genuine edge cases</div>
+        <div class="source">Target · industry benchmark</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">11<small>m</small></div>
+        <div class="lbl"><strong>Time to active</strong>, down from 24-72 hours via threshold lifts and parallelised API calls</div>
+        <div class="source">Target · clean applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">4-5<small>×</small></div>
+        <div class="lbl"><strong>Reviewer throughput</strong> by surfacing AI summaries first, replacing primary review with checking</div>
+        <div class="source">Target · throughput estimate</div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-tag">— Honest framing</div>
+      <p>These targets are <em>illustrative, not measured.</em> They reflect what's plausibly recoverable from current StoxKart funnel benchmarks within two quarters. In any conversation with the company, they'd be framed as "based on industry data, this is the size of the prize — the first job is to instrument and find out the real numbers." Overclaiming is the fastest way to lose credibility in a fintech interview.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 — 90-DAY PLAN ============ -->
+<section class="section" id="plan">
+  <div class="wrap-narrow">
+    <div class="section-eyebrow">/ 07 · The plan</div>
+    <h2>What I'd ship in <em>90 days.</em></h2>
+    <p>The proposal closed with a sequenced 90-day plan. The principle: ship a measurable win in the first month before redesigning anything. Most candidates rush to mockups; the right answer is to instrument first, lift the obvious thresholds, and let the data point at the redesign priorities.</p>
+
+    <div class="ninety-day">
+      <div class="nd-item">
+        <div class="nd-period">Days 0-30<br/>Diagnose</div>
+        <div class="nd-content">
+          <h4>Instrument first, change nothing</h4>
+          <p>Instrument the existing eKYC funnel end-to-end in Mixpanel or Amplitude. Most broking platforms don't have stage-level drop-off in a single dashboard. Pull the last 90 days of failed onboardings, cluster the failure modes, shadow five sub-brokers and five ops agents to map the real workflow vs the documented one. Ship: a single funnel dashboard plus the top three friction hypotheses, ranked by recoverable revenue.</p>
+        </div>
+      </div>
+      <div class="nd-item">
+        <div class="nd-period">Days 30-60<br/>Ship the Coach</div>
+        <div class="nd-content">
+          <h4>Lift thresholds. Kill redundancies. Coach Stage 1.</h4>
+          <p>Lift auto-approval confidence thresholds (a free win — most slowness is conservative defaults, not real risk). Audit every screen against "if DigiLocker just gave us this data, why are we asking for it again?" Stage 1 of the AI Coach goes live on the highest friction point — likely Aadhaar OTP or Video KYC. Branch / Video-KYC fallback flow integrated with SMC's existing branch network — turning a moat into a feature.</p>
+        </div>
+      </div>
+      <div class="nd-item">
+        <div class="nd-period">Days 60-90<br/>Scale + partner</div>
+        <div class="nd-content">
+          <h4>Roll the Coach. Ship the Reviewer. Partner cockpit MVP.</h4>
+          <p>Roll the Coach to all stages. Ship the Ops KYC Reviewer to deflect ~40% of the manual review queue. Partner cockpit MVP for top 200 sub-brokers — live lead status, AI nudges, near-real-time commission visibility. Compress payout cycle from 30-45 days towards 7-day rolling. By day 90, the lead-to-active pipeline for the sub-broker channel goes from "weeks of friction" to "hand the phone to the customer."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 — TAKEAWAYS ============ -->
+<section class="section" id="takeaways">
+  <div class="wrap-narrow">
+    <div class="section-eyebrow">/ 08 · Takeaways</div>
+    <h2>What this exercise <em>actually</em> taught me.</h2>
+
+    <h3>1. Acquisition and conversion are <em>one</em> problem.</h3>
+    <p>The cleanest insight from the research was that fixing onboarding without fixing acquisition wastes leads, and fixing acquisition without fixing onboarding has nothing to convert. SMC's specific shape is that <strong>both are broken</strong> — the sub-broker channel brings hot leads, then 24-72 hour activation kills intent, then sub-brokers stop bothering. A PM with both fixes can move the needle in a single quarter. That's a more interesting position than "fix the funnel."</p>
+
+    <h3>2. Domain fluency &gt; domain experience.</h3>
+    <p>I haven't worked in broking. The closest pattern in my background is the Nutrabay marketplace seller platform — automated KYC, commission engine, NLP compliance, seller scoring. Different regulator, identical architecture. <strong>The vocabulary changes; the product problem doesn't.</strong> A weekend of focused research closed enough of the domain gap to have a credible point of view.</p>
+
+    <h3>3. The application IS the work sample.</h3>
+    <p>For PM roles especially, traditional cover letters and resumes tell the hiring manager almost nothing about how you actually think. <strong>A small artefact built specifically for their company tells them everything.</strong> The resume becomes corroboration. The proposal becomes the actual evaluation surface.</p>
+
+    <h3>4. Three audiences, three drafts.</h3>
+    <p>The recruiter, the founder, and the future me each needed a completely different framing of the same idea. Conflating them — sending the founder-level deep dive to a recruiter, or the recruiter-level summary to a founder — is what makes most outreach miss.</p>
+
+    <div class="pullquote">
+      "Don't claim experience you can't defend. Don't pretend insider knowledge you don't have. Demonstrate the rigour of your thinking, not the depth of your access."
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSER ============ -->
+<section class="closer">
+  <div class="closer-inner">
+    <div class="closer-eyebrow">/ Closing</div>
+    <h3>Building something where this kind of <em>thinking</em> would be useful?</h3>
+    <p>I'm a Senior PM currently at UKG, focused on AI-driven SaaS, regulated platforms, and partner ecosystems. Always interested in fintech, healthtech, marketplace, and education problems with a regulatory edge.</p>
+    <a href="mailto:harshitmittal@zohomail.in" class="closer-cta">Send me a note</a>
+    <div class="closer-meta">
+      <span>Self-initiated PM exercise · 2026</span>
+      <span>Not affiliated with SMC Global Securities</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
