@@ -125,7 +125,7 @@ export const PROJECTS = [
     tagline: "Your lab reports, finally understood. Upload any medical report — get instant, plain-language insights.",
     cover: "🔬",
     liveUrl: "https://read-my-report.vercel.app/",
-    tagsDetail: ["AI/ML", "HealthTech", "React", "Claude API", "PDF Parsing"],
+    tagsDetail: ["AI/ML", "HealthTech", "React", "Gemini API", "PDF Parsing"],
     problem:
       "Lab reports are written for doctors, not patients. Millions of people receive blood tests, metabolic panels, and health reports they can't understand. Reference ranges vary by age, sex, and country. There's no product that translates medical lab data into plain, actionable language — without overstepping into diagnosis.",
     metrics: [
@@ -147,16 +147,16 @@ export const PROJECTS = [
     ],
     techStack: [
       { category: "Frontend", items: "React, Tailwind CSS" },
-      { category: "AI", items: "Claude Sonnet API (Vision + Text)" },
-      { category: "PDF", items: "PDF.js for text, Claude Vision for scans" },
-      { category: "Deploy", items: "Vercel Serverless Functions" },
+      { category: "AI", items: "Gemini 2.5 Flash (Vision + Text), Groq Llama fallback" },
+      { category: "PDF", items: "PDF.js for text, Gemini Vision for scans" },
+      { category: "Deploy", items: "Vercel Edge Functions" },
       { category: "Storage", items: "localStorage (zero server storage)" },
     ],
     process: [
       "Researched how reference ranges vary by lab, country, ethnicity, age, sex, and testing method — built a universal range system",
       "Designed a 4-level status system (Excellent/Normal/Attention/Review) that informs without alarming — no medical jargon, no diagnosis",
       "Built comprehensive AI system prompt covering CBC, CMP, LFT, KFT, thyroid, hormones, vitamins, cardiac markers, and coagulation panels",
-      "Implemented camera capture for elderly users + PDF.js text extraction with Claude Vision fallback for scanned reports",
+      "Implemented camera capture for elderly users + PDF.js text extraction with Gemini Vision fallback for scanned reports",
       "Added 7 strategically placed medical disclaimers — LabDecode never diagnoses, prescribes, or replaces a doctor",
     ],
     disclaimers: [
