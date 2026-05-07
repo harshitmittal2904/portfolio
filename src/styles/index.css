@@ -132,26 +132,26 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
-/* Warm ambient glow */
+/* Warm ambient glow — positioned to avoid hard clip edges */
 .hero-glow {
   position: absolute;
-  top: -10%;
-  right: -15%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+  top: 5%;
+  right: 5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.8;
+  opacity: 0.6;
+  filter: blur(40px);
 }
 
 /* Two-column hero layout */
 .hero-content {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 300px;
   gap: var(--space-3xl);
   align-items: center;
   position: relative;
@@ -166,49 +166,48 @@
 .hero-tiles {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 .hero-tile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-left: 3px solid var(--tile-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   animation: tileIn 0.5s var(--ease-out) both;
-  transition: box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
+  transition: background var(--duration) var(--ease), padding-left var(--duration) var(--ease);
 }
 .hero-tile:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateX(-4px);
+  background: var(--surface);
+  padding-left: 20px;
 }
 .hero-tile-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--tile-accent);
-  flex-shrink: 0;
+  display: none;
 }
 .hero-tile-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   flex: 1;
   letter-spacing: -0.01em;
 }
 .hero-tile-meta {
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 9px;
+  font-weight: 600;
   color: var(--text-muted);
-  padding: 2px 8px;
-  border: 1px solid var(--border-light);
-  border-radius: 100px;
+  padding: 3px 8px;
+  background: var(--accent-softer);
+  border: none;
+  border-radius: 4px;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 @keyframes tileIn {
-  from { opacity: 0; transform: translateX(20px); }
+  from { opacity: 0; transform: translateX(12px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
@@ -220,12 +219,14 @@
   .hero-tiles {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 0;
   }
   .hero-tile {
-    padding: 10px 14px;
+    border-left: 2px solid var(--tile-accent);
+    padding: 8px 12px;
     flex: 0 0 auto;
   }
+  .hero-tile-meta { display: none; }
 }
 
 .hero-eyebrow {
