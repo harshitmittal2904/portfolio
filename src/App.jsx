@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import ProjectDetailPage from "./pages/ProjectDetail";
 import FindMyDetail from "./pages/FindMyDetail";
@@ -8,6 +9,7 @@ import StoxKartDetail from "./pages/StoxKartDetail";
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects/find-my-teardown" element={<FindMyDetail />} />
