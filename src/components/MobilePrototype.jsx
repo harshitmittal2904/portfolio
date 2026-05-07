@@ -20,7 +20,7 @@ function MobilePrototype() {
   const ride = RIDE_OPTIONS[selectedRide];
 
   return (
-    <div style={{ width: 280, height: 560, borderRadius: 32, overflow: "hidden", background: "#111", position: "relative", boxShadow: "0 25px 80px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.08)", flexShrink: 0 }}>
+    <div style={{ width: 280, maxWidth: "90vw", height: 560, borderRadius: 32, overflow: "hidden", background: "#111", position: "relative", boxShadow: "0 25px 80px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.08)", flexShrink: 0 }}>
       <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 100, height: 22, background: "#111", borderRadius: "0 0 16px 16px", zIndex: 50 }} />
       <div style={{ height: 40, background: "#111", display: "flex", alignItems: "flex-end", justifyContent: "space-between", padding: "0 20px 4px", fontSize: 10, color: "#fff", fontWeight: 600 }}>
         <span>8:45</span><span style={{ fontSize: 9, letterSpacing: 1 }}>●●●</span>
