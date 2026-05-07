@@ -227,11 +227,11 @@ export const PROJECTS = [
     id: "nutrabay",
     number: "01",
     year: "Career",
-    title: "Nutrabay Marketplace Seller Platform",
+    title: "Ecommerce Marketplace Seller Platform",
     subtitle: "from APM to platform PM",
     tags: ["Marketplace", "APM / Platform", "Career"],
     summary:
-      "As Associate PM at Nutrabay, I built the marketplace seller platform end-to-end — automated KYC + FSSAI verification, commission engine, NLP-powered compliance tooling, and a seller health cockpit. The pattern recurs as portfolio anchor across regulated marketplaces.",
+      "As Associate PM at an ecommerce marketplace, I built the seller platform end-to-end — automated KYC + FSSAI verification, commission engine, NLP-powered compliance tooling, and a seller health cockpit. The pattern recurs as portfolio anchor across regulated marketplaces.",
     linkLabel: "Available on request",
     href: "#",
     external: false,

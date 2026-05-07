@@ -144,7 +144,7 @@ const TAKEAWAYS = [
   },
   {
     title: "Domain fluency > domain experience.",
-    text: "The closest pattern in my background is the Nutrabay marketplace seller platform — automated KYC, commission engine, NLP compliance, seller scoring. Different regulator, identical architecture. The vocabulary changes; the product problem doesn't.",
+    text: "The closest pattern in my background is the ecommerce marketplace seller platform — automated KYC, commission engine, NLP compliance, seller scoring. Different regulator, identical architecture. The vocabulary changes; the product problem doesn't.",
   },
   {
     title: "The artefact IS the work sample.",

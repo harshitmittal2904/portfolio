@@ -12,7 +12,7 @@ const SIGNAL_TILES = [
   { label: "StoxKart eKYC", meta: "Case Study", accent: "#ffc629" },
   { label: "Find My Teardown", meta: "Case Study", accent: "#1d1d1f" },
   { label: "Smart Commute", meta: "Prototype", accent: "#E8590C" },
-  { label: "Nutrabay", meta: "Career", accent: "#ea580c" },
+  { label: "Ecommerce Marketplace", meta: "Career", accent: "#ea580c" },
 ];
 
 export default function Hero() {
