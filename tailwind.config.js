@@ -4,37 +4,30 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#09090b",
-        surface: "#111116",
-        "surface-2": "#18181d",
-        border: "rgba(255,255,255,0.06)",
-        "border-2": "rgba(255,255,255,0.14)",
-        "text-1": "#f4f4f5",
-        "text-2": "#a1a1aa",
-        "text-3": "#52525b",
-        accent: "#FFD400",
-        "accent-2": "#FF8C00",
-        green: "#4ade80",
-      },
-      keyframes: {
-        softPulse: {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "1" },
-        },
-      },
-      animation: {
-        "soft-pulse": "softPulse 2s ease-in-out infinite",
-      },
-      boxShadow: {
-        lift: "0 20px 60px rgba(0,0,0,0.5)",
+        bg: "var(--bg)",
+        "bg-alt": "var(--bg-alt)",
+        surface: "var(--surface)",
+        "text-1": "var(--text-primary)",
+        "text-2": "var(--text-secondary)",
+        "text-3": "var(--text-muted)",
+        accent: "var(--accent)",
+        "accent-light": "var(--accent-light)",
+        border: "var(--border)",
+        green: "var(--green)",
       },
       fontFamily: {
-        display: ['Sora', 'system-ui', 'sans-serif'],
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       maxWidth: {
-        content: "1120px",
+        content: "1200px",
+        narrow: "800px",
+      },
+      borderRadius: {
+        'xl': '16px',
+        '2xl': '20px',
+        '3xl': '24px',
       },
     },
   },

@@ -495,7 +495,7 @@ function SmartCommuteDetail({ project, onBack }) {
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const project = PROJECTS.find((p) => p.id === id);
+  const project = PROJECTS.find((p) => p.id === id) || (id === "smart-commute" ? PROJECTS.find((p) => p.id === "rapido") : null);
   const handleBack = () => navigate("/");
 
   if (!project) {
@@ -509,24 +509,24 @@ export default function ProjectDetailPage() {
     );
   }
 
+  const detailStyle = { minHeight: "100vh", background: "var(--bg)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif", padding: "24px 24px 80px", maxWidth: 1080, margin: "0 auto" };
+
   if (id === "schemewise") {
-    return (
-      <main style={{ minHeight: "100vh", background: "#08080a", color: "#e8e8e8", fontFamily: "'DM Sans', 'Manrope', sans-serif", padding: "24px 24px 80px", maxWidth: 1080, margin: "0 auto" }}>
-        <SchemeWiseDetail project={project} onBack={handleBack} />
-      </main>
-    );
+    return <main style={detailStyle}><SchemeWiseDetail project={project} onBack={handleBack} /></main>;
   }
   if (id === "labdecode") {
-    return (
-      <main style={{ minHeight: "100vh", background: "#08080a", color: "#e8e8e8", fontFamily: "'DM Sans', 'Manrope', sans-serif", padding: "24px 24px 80px", maxWidth: 1080, margin: "0 auto" }}>
-        <LabDecodeDetail project={project} onBack={handleBack} />
-      </main>
-    );
+    return <main style={detailStyle}><LabDecodeDetail project={project} onBack={handleBack} /></main>;
   }
-  // smart-commute fallback
+  if (id === "smart-commute" || id === "rapido") {
+    return <main style={detailStyle}><SmartCommuteDetail project={project} onBack={handleBack} /></main>;
+  }
+  // Fallback for smc-stoxkart, nutrabay, or any other project
   return (
-    <main style={{ minHeight: "100vh", background: "#08080a", color: "#e8e8e8", fontFamily: "'DM Sans', 'Manrope', sans-serif", padding: "24px 24px 80px", maxWidth: 1080, margin: "0 auto" }}>
-      <SmartCommuteDetail project={project} onBack={handleBack} />
+    <main style={detailStyle}>
+      <button onClick={handleBack} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(244,237,228,0.04)", border: "1px solid rgba(244,237,228,0.06)", borderRadius: 10, padding: "7px 14px", color: "#a1a1aa", fontSize: 11, fontWeight: 600, cursor: "pointer", marginBottom: 24 }}>← Back to Portfolio</button>
+      <h1 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, letterSpacing: -1.5, lineHeight: 1.1, maxWidth: 650, marginBottom: 12, fontFamily: "'Playfair Display', Georgia, serif" }}>{project.title}</h1>
+      <p style={{ fontSize: 15, color: "#a1a1aa", maxWidth: 540, lineHeight: 1.7, marginBottom: 24 }}>{project.summary}</p>
+      <p style={{ fontSize: 13, color: "#71717a" }}>Full case study coming soon.</p>
     </main>
   );
 }
