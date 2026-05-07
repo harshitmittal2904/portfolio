@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import ProjectDetailPage from "./pages/ProjectDetail";
 import FindMyDetail from "./pages/FindMyDetail";
 import StoxKartDetail from "./pages/StoxKartDetail";
+import LabDecodeDetail from "./pages/LabDecodeDetail";
+import SchemeWiseDetail from "./pages/SchemeWiseDetail";
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/projects/find-my-teardown" element={<FindMyDetail />} />
         <Route path="/projects/smc-stoxkart" element={<StoxKartDetail />} />
+        <Route path="/projects/labdecode" element={<LabDecodeDetail />} />
+        <Route path="/projects/schemewise" element={<SchemeWiseDetail />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
         <Route path="*" element={<Home />} />
       </Routes>

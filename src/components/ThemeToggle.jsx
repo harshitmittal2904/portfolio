@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 export default function ThemeToggle() {
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "system";
-    return localStorage.getItem("theme") || "system";
+    return localStorage.getItem("theme") || "light";
   });
 
   useEffect(() => {
@@ -19,9 +19,9 @@ export default function ThemeToggle() {
 
   const cycle = () => {
     setTheme((prev) => {
-      if (prev === "system") return "dark";
-      if (prev === "dark") return "light";
-      return "system";
+      if (prev === "light") return "dark";
+      if (prev === "dark") return "system";
+      return "light";
     });
   };
 

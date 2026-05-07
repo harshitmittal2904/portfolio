@@ -48,9 +48,9 @@ export const PROJECTS = [
     isLive: true,
     summary:
       "India has ₹18 lakh crore sitting in NPS, PPF, EPF, SSY, SCSS — some of the best instruments in the world, with the worst documentation. SchemeWise is the layer that makes them actually understandable. Free, no signup, in plain English.",
-    linkLabel: "Open SchemeWise",
-    href: "https://schemewise-one.vercel.app/",
-    external: true,
+    linkLabel: "Read the case study",
+    href: "/projects/schemewise",
+    external: false,
     stats: [
       { num: "10", unit: "+", label: "Government\nschemes covered" },
       { num: "50", unit: "+", label: "Financial terms\njargon-busted" },
@@ -109,9 +109,9 @@ export const PROJECTS = [
     isLive: true,
     summary:
       "Lab reports are written for doctors, not patients. LabDecode reads any blood test, groups parameters by organ system, and translates each value into plain English. It does NOT diagnose — it makes you a smarter participant in your own care.",
-    linkLabel: "Open LabDecode",
-    href: "https://read-my-report.vercel.app/",
-    external: true,
+    linkLabel: "Read the case study",
+    href: "/projects/labdecode",
+    external: false,
     stats: [
       { num: "100", unit: "+", label: "Lab parameters\nrecognized" },
       { num: "10", unit: "", label: "Organ system\nviews" },
@@ -185,7 +185,7 @@ export const PROJECTS = [
       { num: "15", unit: "+", label: "Rides/month\nactivation" },
     ],
     // Legacy fields for ProjectDetail page
-    color: "#FFD400",
+    color: "#E8590C",
     company: "Rapido / Ride-Hailing",
     status: "Concept → PRD → Prototype",
     tagline: "One card. One tap. The app already knows where you're going.",
